@@ -1,0 +1,473 @@
+[1mdiff --git a/src/main/java/builder/SolicitudBuilder.java b/src/main/java/builder/SolicitudBuilder.java[m
+[1mindex ee758cc..a6366b1 100644[m
+[1m--- a/src/main/java/builder/SolicitudBuilder.java[m
+[1m+++ b/src/main/java/builder/SolicitudBuilder.java[m
+[36m@@ -1,8 +1,8 @@[m
+[31m-[m
+ package builder;[m
+ [m
+ import model.Cliente;[m
+ import model.ElementoServicio;[m
+[32m+[m[32mimport model.PrioridadSolicitud;[m
+ import model.Solicitud;[m
+ [m
+ import java.time.LocalDate;[m
+[36m@@ -10,61 +10,89 @@[m [mimport java.util.ArrayList;[m
+ import java.util.List;[m
+ [m
+ /**[m
+[31m- * Construye solicitudes de servicios técnicos paso a paso.[m
+[32m+[m[32m * Construye objetos Solicitud paso a paso mediante el patrón Builder.[m
+  */[m
+ public class SolicitudBuilder {[m
+ [m
+     private String codigo;[m
+[31m-    private LocalDate fechaCreacion;[m
+[32m+[m[32m    private LocalDate fechaCreacion = LocalDate.now();[m
+     private Cliente cliente;[m
+[31m-    private List<ElementoServicio> elementos = new ArrayList<>();[m
+[32m+[m[32m    private final List<ElementoServicio> elementos = new ArrayList<>();[m
+     private LocalDate fechaProgramada;[m
+     private String observaciones;[m
+[31m-    private String prioridad;[m
+[31m-[m
+[31m-    public SolicitudBuilder() {[m
+[31m-        this.fechaCreacion = LocalDate.now();[m
+[31m-    }[m
+[32m+[m[32m    private PrioridadSolicitud prioridad = PrioridadSolicitud.MEDIA;[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Define el código de la solicitud.[m
+[32m+[m[32m     */[m
+     public SolicitudBuilder codigo(String codigo) {[m
+         this.codigo = codigo;[m
+         return this;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Define la fecha de creación.[m
+[32m+[m[32m     */[m
+     public SolicitudBuilder fechaCreacion(LocalDate fechaCreacion) {[m
+         this.fechaCreacion = fechaCreacion;[m
+         return this;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Define el cliente de la solicitud.[m
+[32m+[m[32m     */[m
+     public SolicitudBuilder cliente(Cliente cliente) {[m
+         this.cliente = cliente;[m
+         return this;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Agrega un servicio o paquete a la solicitud.[m
+[32m+[m[32m     */[m
+     public SolicitudBuilder agregarElemento(ElementoServicio elemento) {[m
+         if (elemento == null) {[m
+[31m-            throw new IllegalArgumentException("El elemento no puede ser nulo.");[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "El elemento de servicio no puede ser nulo."[m
+[32m+[m[32m            );[m
+         }[m
+ [m
+[31m-        this.elementos.add(elemento);[m
+[32m+[m[32m        elementos.add(elemento);[m
+         return this;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Define la fecha programada para la solicitud.[m
+[32m+[m[32m     */[m
+     public SolicitudBuilder fechaProgramada(LocalDate fechaProgramada) {[m
+         this.fechaProgramada = fechaProgramada;[m
+         return this;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Define las observaciones de la solicitud.[m
+[32m+[m[32m     */[m
+     public SolicitudBuilder observaciones(String observaciones) {[m
+         this.observaciones = observaciones;[m
+         return this;[m
+     }[m
+ [m
+[31m-    public SolicitudBuilder prioridad(String prioridad) {[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Define la prioridad de la solicitud.[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public SolicitudBuilder prioridad(PrioridadSolicitud prioridad) {[m
+[32m+[m[32m        if (prioridad == null) {[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "La prioridad no puede ser nula."[m
+[32m+[m[32m            );[m
+[32m+[m[32m        }[m
+[32m+[m
+         this.prioridad = prioridad;[m
+         return this;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Construye y devuelve la solicitud.[m
+[32m+[m[32m     */[m
+     public Solicitud construir() {[m
+         return new Solicitud([m
+                 codigo,[m
+[36m@@ -76,4 +104,4 @@[m [mpublic class SolicitudBuilder {[m
+                 prioridad[m
+         );[m
+     }[m
+[31m-}[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/main/java/controller/ControladorPaquetes.java b/src/main/java/controller/ControladorPaquetes.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..c9a8ff5[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/controller/ControladorPaquetes.java[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mpackage controller;[m
+[32m+[m
+[32m+[m[32mpublic class ControladorPaquetes {[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/main/java/controller/ControladorPrincipal.java b/src/main/java/controller/ControladorPrincipal.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b9b8a18[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/controller/ControladorPrincipal.java[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mpackage controller;[m
+[32m+[m
+[32m+[m[32mpublic class ControladorPrincipal {[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/main/java/model/PrioridadSolicitud.java b/src/main/java/model/PrioridadSolicitud.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..68f8946[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/model/PrioridadSolicitud.java[m
+[36m@@ -0,0 +1,11 @@[m
+[32m+[m[32mpackage model;[m
+[32m+[m
+[32m+[m[32m/**[m
+[32m+[m[32m * Define los niveles de prioridad disponibles para una solicitud.[m
+[32m+[m[32m */[m
+[32m+[m[32mpublic enum PrioridadSolicitud {[m
+[32m+[m
+[32m+[m[32m    BAJA,[m
+[32m+[m[32m    MEDIA,[m
+[32m+[m[32m    ALTA[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/main/java/model/Solicitud.java b/src/main/java/model/Solicitud.java[m
+[1mindex 13ddee1..64d1825 100644[m
+[1m--- a/src/main/java/model/Solicitud.java[m
+[1m+++ b/src/main/java/model/Solicitud.java[m
+[36m@@ -1,4 +1,3 @@[m
+[31m-[m
+ package model;[m
+ [m
+ import java.time.LocalDate;[m
+[36m@@ -11,14 +10,25 @@[m [mimport java.util.List;[m
+  */[m
+ public class Solicitud {[m
+ [m
+[31m-    private String codigo;[m
+[31m-    private LocalDate fechaCreacion;[m
+[31m-    private Cliente cliente;[m
+[31m-    private List<ElementoServicio> elementos;[m
+[31m-    private LocalDate fechaProgramada;[m
+[31m-    private String observaciones;[m
+[31m-    private String prioridad;[m
+[31m-[m
+[32m+[m[32m    private final String codigo;[m
+[32m+[m[32m    private final LocalDate fechaCreacion;[m
+[32m+[m[32m    private final Cliente cliente;[m
+[32m+[m[32m    private final List<ElementoServicio> elementos;[m
+[32m+[m[32m    private final LocalDate fechaProgramada;[m
+[32m+[m[32m    private final String observaciones;[m
+[32m+[m[32m    private final PrioridadSolicitud prioridad;[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Construye una solicitud y valida sus datos obligatorios.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param codigo código único de la solicitud[m
+[32m+[m[32m     * @param fechaCreacion fecha de creación[m
+[32m+[m[32m     * @param cliente cliente que realiza la solicitud[m
+[32m+[m[32m     * @param elementos servicios o paquetes solicitados[m
+[32m+[m[32m     * @param fechaProgramada fecha programada, si existe[m
+[32m+[m[32m     * @param observaciones observaciones adicionales[m
+[32m+[m[32m     * @param prioridad prioridad de la solicitud[m
+[32m+[m[32m     */[m
+     public Solicitud([m
+             String codigo,[m
+             LocalDate fechaCreacion,[m
+[36m@@ -26,29 +36,45 @@[m [mpublic class Solicitud {[m
+             List<ElementoServicio> elementos,[m
+             LocalDate fechaProgramada,[m
+             String observaciones,[m
+[31m-            String prioridad) {[m
+[31m-[m
+[32m+[m[32m            PrioridadSolicitud prioridad[m
+[32m+[m[32m    ) {[m
+         if (codigo == null || codigo.isBlank()) {[m
+[31m-            throw new IllegalArgumentException("El código es obligatorio.");[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "El código es obligatorio."[m
+[32m+[m[32m            );[m
+         }[m
+ [m
+         if (fechaCreacion == null) {[m
+[31m-            throw new IllegalArgumentException("La fecha de creación es obligatoria.");[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "La fecha de creación es obligatoria."[m
+[32m+[m[32m            );[m
+         }[m
+ [m
+         if (cliente == null) {[m
+[31m-            throw new IllegalArgumentException("El cliente es obligatorio.");[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "El cliente es obligatorio."[m
+[32m+[m[32m            );[m
+         }[m
+ [m
+         if (elementos == null || elementos.isEmpty()) {[m
+[31m-            throw new IllegalArgumentException("Debe incluir al menos un elemento de servicio.");[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "Debe incluir al menos un elemento de servicio."[m
+[32m+[m[32m            );[m
+         }[m
+ [m
+         if (elementos.contains(null)) {[m
+[31m-            throw new IllegalArgumentException("Los elementos no pueden ser nulos.");[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "Los elementos no pueden ser nulos."[m
+[32m+[m[32m            );[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        if (prioridad == null) {[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "La prioridad es obligatoria."[m
+[32m+[m[32m            );[m
+         }[m
+ [m
+[31m-        this.codigo = codigo;[m
+[32m+[m[32m        this.codigo = codigo.trim();[m
+         this.fechaCreacion = fechaCreacion;[m
+         this.cliente = cliente;[m
+         this.elementos = new ArrayList<>(elementos);[m
+[36m@@ -57,6 +83,11 @@[m [mpublic class Solicitud {[m
+         this.prioridad = prioridad;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Calcula el costo de los elementos de la solicitud.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return costo total de los servicios y paquetes[m
+[32m+[m[32m     */[m
+     public double calcularCostoTotal() {[m
+         double total = 0;[m
+ [m
+[36m@@ -67,31 +98,52 @@[m [mpublic class Solicitud {[m
+         return total;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * @return código de la solicitud[m
+[32m+[m[32m     */[m
+     public String getCodigo() {[m
+         return codigo;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * @return fecha de creación[m
+[32m+[m[32m     */[m
+     public LocalDate getFechaCreacion() {[m
+         return fechaCreacion;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * @return cliente asociado[m
+[32m+[m[32m     */[m
+     public Cliente getCliente() {[m
+         return cliente;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * @return lista no modificable de elementos[m
+[32m+[m[32m     */[m
+     public List<ElementoServicio> getElementos() {[m
+         return Collections.unmodifiableList(elementos);[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * @return fecha programada o null si no se estableció[m
+[32m+[m[32m     */[m
+     public LocalDate getFechaProgramada() {[m
+         return fechaProgramada;[m
+     }[m
+ [m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * @return observaciones adicionales[m
+[32m+[m[32m     */[m
+     public String getObservaciones() {[m
+         return observaciones;[m
+     }[m
+ [m
+[31m-    public String getPrioridad() {[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * @return prioridad de la solicitud[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public PrioridadSolicitud getPrioridad() {[m
+         return prioridad;[m
+     }[m
+[31m-}[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/main/java/service/CatalogoService.java b/src/main/java/service/CatalogoService.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..9fd58bd[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/service/CatalogoService.java[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mpackage service;[m
+[32m+[m
+[32m+[m[32mpublic class CatalogoService {[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/main/java/service/ClienteService.java b/src/main/java/service/ClienteService.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a0f8c80[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/service/ClienteService.java[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mpackage service;[m
+[32m+[m
+[32m+[m[32mpublic class ClienteService {[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/main/java/service/PaqueteService.java b/src/main/java/service/PaqueteService.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3298f02[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/service/PaqueteService.java[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mpackage service;[m
+[32m+[m
+[32m+[m[32mpublic class PaqueteService {[m
+[32m+[m[32m}[m
+[1mdiff --git a/src/main/java/service/SolicitudService.java b/src/main/java/service/SolicitudService.java[m
+[1mindex c7c7b39..8d8432c 100644[m
+[1m--- a/src/main/java/service/SolicitudService.java[m
+[1m+++ b/src/main/java/service/SolicitudService.java[m
+[36m@@ -1,14 +1,94 @@[m
+[31m-[m
+ package service;[m
+ [m
+ import model.Solicitud;[m
+ import model.TecnicoInfo;[m
+ [m
+[32m+[m[32mimport java.util.ArrayList;[m
+[32m+[m[32mimport java.util.Collections;[m
+[32m+[m[32mimport java.util.HashSet;[m
+[32m+[m[32mimport java.util.List;[m
+[32m+[m[32mimport java.util.Set;[m
+[32m+[m
+ /**[m
+[31m- * Gestiona las solicitudes y el cálculo de sus costos.[m
+[32m+[m[32m * Gestiona el registro, la consulta y los costos de las solicitudes.[m
+  */[m
+ public class SolicitudService {[m
+ [m
+[32m+[m[32m    private final List<Solicitud> solicitudes;[m
+[32m+[m[32m    private final Set<String> codigosRegistrados;[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Inicializa las colecciones de solicitudes.[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public SolicitudService() {[m
+[32m+[m[32m        solicitudes = new ArrayList<>();[m
+[32m+[m[32m        codigosRegistrados = new HashSet<>();[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Registra una solicitud si su código no está repetido.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param solicitud solicitud que se desea registrar[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public void registrarSolicitud(Solicitud solicitud) {[m
+[32m+[m[32m        if (solicitud == null) {[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "La solicitud es obligatoria."[m
+[32m+[m[32m            );[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        String codigo = solicitud.getCodigo().trim().toUpperCase();[m
+[32m+[m
+[32m+[m[32m        if (codigosRegistrados.contains(codigo)) {[m
+[32m+[m[32m            throw new IllegalArgumentException([m
+[32m+[m[32m                    "Ya existe una solicitud con ese código."[m
+[32m+[m[32m            );[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        solicitudes.add(solicitud);[m
+[32m+[m[32m        codigosRegistrados.add(codigo);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Obtiene las solicitudes registradas sin permitir modificar la lista.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return lista de solicitudes[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public List<Solicitud> obtenerSolicitudes() {[m
+[32m+[m[32m        return Collections.unmodifiableList(solicitudes);[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Busca una solicitud por su código.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param codigo código de la solicitud[m
+[32m+[m[32m     * @return solicitud encontrada o null si no existe[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public Solicitud buscarPorCodigo(String codigo) {[m
+[32m+[m[32m        if (codigo == null || codigo.isBlank()) {[m
+[32m+[m[32m            return null;[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        String codigoBuscado = codigo.trim();[m
+[32m+[m
+[32m+[m[32m        for (Solicitud solicitud : solicitudes) {[m
+[32m+[m[32m            if (solicitud.getCodigo().equalsIgnoreCase(codigoBuscado)) {[m
+[32m+[m[32m                return solicitud;[m
+[32m+[m[32m            }[m
+[32m+[m[32m        }[m
+[32m+[m
+[32m+[m[32m        return null;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Calcula el costo de una solicitud y, si corresponde,[m
+[32m+[m[32m     * suma el costo de desplazamiento del técnico.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param solicitud solicitud cuyo costo se calcula[m
+[32m+[m[32m     * @param atencionPresencial indica si la atención es presencial[m
+[32m+[m[32m     * @param tecnico técnico asignado a la atención presencial[m
+[32m+[m[32m     * @return costo total de la solicitud[m
+[32m+[m[32m     */[m
+     public double calcularCostoTotal([m
+             Solicitud solicitud,[m
+             boolean atencionPresencial,[m
+[36m@@ -35,4 +115,4 @@[m [mpublic class SolicitudService {[m
+ [m
+         return total;[m
+     }[m
+[31m-}[m
+[32m+[m[32m}[m
+\ No newline at end of file[m
+[1mdiff --git a/src/main/java/view/VistaPaquetes.java b/src/main/java/view/VistaPaquetes.java[m
+[1mnew file mode 100644[m
+[1mindex 0000000..5192d9b[m
+[1m--- /dev/null[m
+[1m+++ b/src/main/java/view/VistaPaquetes.java[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mpackage view;[m
+[32m+[m
+[32m+[m[32mpublic class VistaPaquetes {[m
+[32m+[m[32m}[m
