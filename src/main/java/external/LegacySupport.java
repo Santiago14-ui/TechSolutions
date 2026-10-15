@@ -30,7 +30,7 @@ public class LegacySupport {
     /**
      * Metodo para simular el funcionamiento de la implementacion externa de LegacySupport
      * @param codigoEspecialidad numero correspondiente a la especialidad necesitada. 1=redes, 2=mantenimiento, 3=Informacion.
-     * @return
+     * @return informacion entregada por la parte externa, la cual no es compatible con el funcionamiento del sistema actual
      */
     public String consultarTecnico(int codigoEspecialidad) {
 

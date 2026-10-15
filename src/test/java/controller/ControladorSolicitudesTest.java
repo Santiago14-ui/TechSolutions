@@ -61,7 +61,7 @@ class ControladorSolicitudesTest {
         List<Cliente> clientes = controlador.obtenerClientes();
 
         assertEquals(4, clientes.size());
-        assertEquals("1094900001", clientes.get(0).getDocumento());
+        assertEquals("1094900001", clientes.getFirst().getDocumento());
     }
 
     @Test
@@ -79,7 +79,7 @@ class ControladorSolicitudesTest {
         controlador.agregarElemento(servicio);
 
         assertEquals(1, controlador.obtenerElementosSeleccionados().size());
-        assertSame(servicio, controlador.obtenerElementosSeleccionados().get(0));
+        assertSame(servicio, controlador.obtenerElementosSeleccionados().getFirst());
     }
 
     @Test
