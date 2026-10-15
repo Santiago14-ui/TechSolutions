@@ -3,6 +3,7 @@ package app;
 import controller.ControladorPaquetes;
 import controller.ControladorPrincipal;
 import controller.ControladorSolicitudes;
+import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -20,7 +21,7 @@ import view.VistaSolicitudes;
  * Clase principal de TechSolutions.
  * Construye la ventana inicial y permite acceder a los módulos.
  */
-public class Main extends javafx.application.Application {
+public class Main extends Application {
 
     private ControladorPrincipal controlador;
     private ControladorPaquetes controladorPaquetes;
