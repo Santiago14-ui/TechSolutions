@@ -1,3 +1,4 @@
+
 package controller;
 
 import builder.SolicitudBuilder;
@@ -36,12 +37,6 @@ public class ControladorSolicitudes {
 
     /**
      * Inicializa el controlador con los servicios de la aplicación.
-     *
-     * @param catalogoService catálogo de servicios
-     * @param clienteService servicio de clientes
-     * @param paqueteService servicio de paquetes
-     * @param solicitudService servicio de solicitudes
-     * @param tecnicoService servicio de técnicos
      */
     public ControladorSolicitudes(
             CatalogoService catalogoService,
@@ -55,6 +50,7 @@ public class ControladorSolicitudes {
                 || paqueteService == null
                 || solicitudService == null
                 || tecnicoService == null) {
+
             throw new IllegalArgumentException(
                     "Los servicios del controlador son obligatorios."
             );
@@ -71,8 +67,6 @@ public class ControladorSolicitudes {
 
     /**
      * Obtiene los clientes precargados.
-     *
-     * @return lista de clientes
      */
     public List<Cliente> obtenerClientes() {
         return clienteService.obtenerClientes();
@@ -80,8 +74,6 @@ public class ControladorSolicitudes {
 
     /**
      * Obtiene los servicios del catálogo.
-     *
-     * @return lista de servicios
      */
     public List<Servicio> obtenerServicios() {
         return catalogoService.obtenerServicios();
@@ -89,8 +81,6 @@ public class ControladorSolicitudes {
 
     /**
      * Obtiene los paquetes registrados.
-     *
-     * @return lista de paquetes
      */
     public List<PaqueteServicios> obtenerPaquetes() {
         return paqueteService.obtenerPaquetes();
@@ -98,8 +88,6 @@ public class ControladorSolicitudes {
 
     /**
      * Agrega un servicio o paquete a la selección actual.
-     *
-     * @param elemento servicio o paquete seleccionado
      */
     public void agregarElemento(ElementoServicio elemento) {
         if (elemento == null) {
@@ -120,17 +108,13 @@ public class ControladorSolicitudes {
 
     /**
      * Obtiene una copia de los elementos seleccionados.
-     *
-     * @return copia de los elementos seleccionados
      */
     public List<ElementoServicio> obtenerElementosSeleccionados() {
         return new ArrayList<>(elementosSeleccionados);
     }
 
     /**
-     * Calcula el subtotal de los elementos seleccionados.
-     *
-     * @return subtotal sin complementos
+     * Calcula el subtotal sin complementos.
      */
     public double calcularCostoElementos() {
         double total = 0;
@@ -143,15 +127,7 @@ public class ControladorSolicitudes {
     }
 
     /**
-     * Calcula el costo de los elementos seleccionados aplicando
-     * los complementos indicados mediante el patrón Decorator.
-     *
-     * Los complementos se aplican a cada elemento seleccionado.
-     *
-     * @param atencionPrioritaria indica si se agrega atención prioritaria
-     * @param soporte30Dias indica si se agrega soporte por 30 días
-     * @param atencionDomicilio indica si se agrega atención a domicilio
-     * @return costo total con los complementos seleccionados
+     * Calcula el costo aplicando los complementos seleccionados.
      */
     public double calcularCostoConComplementos(
             boolean atencionPrioritaria,
@@ -185,14 +161,8 @@ public class ControladorSolicitudes {
     }
 
     /**
-     * Registra una solicitud utilizando el patrón Builder.
-     *
-     * @param codigo código único de la solicitud
-     * @param documentoCliente documento del cliente
-     * @param fechaProgramada fecha programada, si existe
-     * @param observaciones observaciones adicionales
-     * @param prioridad prioridad de la solicitud
-     * @return solicitud registrada
+     * Conserva la firma original para las llamadas existentes.
+     * Por defecto, registra una solicitud no presencial.
      */
     public Solicitud registrarSolicitud(
             String codigo,
@@ -200,6 +170,30 @@ public class ControladorSolicitudes {
             LocalDate fechaProgramada,
             String observaciones,
             PrioridadSolicitud prioridad) {
+
+        return registrarSolicitud(
+                codigo,
+                documentoCliente,
+                fechaProgramada,
+                observaciones,
+                prioridad,
+                false,
+                null
+        );
+    }
+
+    /**
+     * Registra una solicitud mediante Builder, incluyendo
+     * la modalidad de atención y el costo de desplazamiento.
+     */
+    public Solicitud registrarSolicitud(
+            String codigo,
+            String documentoCliente,
+            LocalDate fechaProgramada,
+            String observaciones,
+            PrioridadSolicitud prioridad,
+            boolean atencionPresencial,
+            TecnicoInfo tecnico) {
 
         if (codigo == null || codigo.isBlank()) {
             throw new IllegalArgumentException(
@@ -228,6 +222,13 @@ public class ControladorSolicitudes {
             );
         }
 
+        if (atencionPresencial
+                && (tecnico == null || !tecnico.isDisponible())) {
+            throw new IllegalArgumentException(
+                    "Debe seleccionar un técnico disponible para la atención presencial."
+            );
+        }
+
         SolicitudBuilder builder = new SolicitudBuilder()
                 .codigo(codigo)
                 .fechaCreacion(LocalDate.now())
@@ -238,6 +239,15 @@ public class ControladorSolicitudes {
 
         for (ElementoServicio elemento : elementosSeleccionados) {
             builder.agregarElemento(elemento);
+        }
+
+        if (atencionPresencial) {
+            builder.atencionPresencial(
+                    tecnico.getId(),
+                    tecnico.getCostoDesplazamiento()
+            );
+        } else {
+            builder.atencionNoPresencial();
         }
 
         Solicitud solicitud = builder.construir();
@@ -251,9 +261,6 @@ public class ControladorSolicitudes {
 
     /**
      * Busca una solicitud por su código.
-     *
-     * @param codigo código que se desea consultar
-     * @return solicitud encontrada o null si no existe
      */
     public Solicitud buscarPorCodigo(String codigo) {
         return solicitudService.buscarPorCodigo(codigo);
@@ -261,8 +268,6 @@ public class ControladorSolicitudes {
 
     /**
      * Obtiene las solicitudes registradas.
-     *
-     * @return lista de solicitudes
      */
     public List<Solicitud> obtenerSolicitudes() {
         return solicitudService.obtenerSolicitudes();
@@ -270,22 +275,13 @@ public class ControladorSolicitudes {
 
     /**
      * Consulta un técnico mediante el Adapter.
-     *
-     * @param codigoEspecialidad código de especialidad
-     * @return información del técnico
      */
     public TecnicoInfo consultarTecnico(int codigoEspecialidad) {
         return tecnicoService.consultarTecnico(codigoEspecialidad);
     }
 
     /**
-     * Calcula el costo de una solicitud y agrega el desplazamiento
-     * cuando la atención es presencial.
-     *
-     * @param solicitud solicitud que se desea cotizar
-     * @param atencionPresencial indica si la atención es presencial
-     * @param tecnico técnico asignado
-     * @return costo total de la solicitud
+     * Calcula el costo total de una solicitud.
      */
     public double calcularCostoTotal(
             Solicitud solicitud,

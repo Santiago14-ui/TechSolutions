@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
- * Representa una solicitud de servicios técnicos.
- */
 public class Solicitud {
 
     private final String codigo;
@@ -18,17 +15,11 @@ public class Solicitud {
     private final String observaciones;
     private final PrioridadSolicitud prioridad;
 
-    /**
-     * Construye una solicitud y valida sus datos obligatorios.
-     *
-     * @param codigo código único de la solicitud
-     * @param fechaCreacion fecha de creación
-     * @param cliente cliente que realiza la solicitud
-     * @param elementos servicios o paquetes solicitados
-     * @param fechaProgramada fecha programada, si existe
-     * @param observaciones observaciones adicionales
-     * @param prioridad prioridad de la solicitud
-     */
+    private final boolean atencionPresencial;
+    private final String idTecnico;
+    private final double costoDesplazamiento;
+
+    // Constructor original, conservado para mantener compatibilidad.
     public Solicitud(
             String codigo,
             LocalDate fechaCreacion,
@@ -36,11 +27,38 @@ public class Solicitud {
             List<ElementoServicio> elementos,
             LocalDate fechaProgramada,
             String observaciones,
-            PrioridadSolicitud prioridad
-    ) {
+            PrioridadSolicitud prioridad) {
+
+        this(
+                codigo,
+                fechaCreacion,
+                cliente,
+                elementos,
+                fechaProgramada,
+                observaciones,
+                prioridad,
+                false,
+                null,
+                0
+        );
+    }
+
+    // Constructor que guarda la modalidad y el costo del desplazamiento.
+    public Solicitud(
+            String codigo,
+            LocalDate fechaCreacion,
+            Cliente cliente,
+            List<ElementoServicio> elementos,
+            LocalDate fechaProgramada,
+            String observaciones,
+            PrioridadSolicitud prioridad,
+            boolean atencionPresencial,
+            String idTecnico,
+            double costoDesplazamiento) {
+
         if (codigo == null || codigo.isBlank()) {
             throw new IllegalArgumentException(
-                    "El código es obligatorio."
+                    "El código de la solicitud es obligatorio."
             );
         }
 
@@ -58,13 +76,13 @@ public class Solicitud {
 
         if (elementos == null || elementos.isEmpty()) {
             throw new IllegalArgumentException(
-                    "Debe incluir al menos un elemento de servicio."
+                    "La solicitud debe contener al menos un servicio o paquete."
             );
         }
 
-        if (elementos.contains(null)) {
+        if (elementos.stream().anyMatch(elemento -> elemento == null)) {
             throw new IllegalArgumentException(
-                    "Los elementos no pueden ser nulos."
+                    "Los elementos de la solicitud no pueden ser nulos."
             );
         }
 
@@ -74,20 +92,41 @@ public class Solicitud {
             );
         }
 
+        if (!Double.isFinite(costoDesplazamiento)
+                || costoDesplazamiento < 0) {
+            throw new IllegalArgumentException(
+                    "El costo del desplazamiento no es válido."
+            );
+        }
+
+        if (atencionPresencial
+                && (idTecnico == null || idTecnico.isBlank())) {
+            throw new IllegalArgumentException(
+                    "La atención presencial requiere un técnico."
+            );
+        }
+
+        if (!atencionPresencial && costoDesplazamiento != 0) {
+            throw new IllegalArgumentException(
+                    "Una solicitud no presencial no puede tener costo de desplazamiento."
+            );
+        }
+
         this.codigo = codigo.trim();
         this.fechaCreacion = fechaCreacion;
         this.cliente = cliente;
         this.elementos = new ArrayList<>(elementos);
         this.fechaProgramada = fechaProgramada;
-        this.observaciones = observaciones;
+        this.observaciones = observaciones == null
+                ? ""
+                : observaciones.trim();
         this.prioridad = prioridad;
+
+        this.atencionPresencial = atencionPresencial;
+        this.idTecnico = atencionPresencial ? idTecnico.trim() : null;
+        this.costoDesplazamiento = costoDesplazamiento;
     }
 
-    /**
-     * Calcula el costo de los elementos de la solicitud.
-     *
-     * @return costo total de los servicios y paquetes
-     */
     public double calcularCostoTotal() {
         double total = 0;
 
@@ -95,55 +134,46 @@ public class Solicitud {
             total += elemento.calcularCosto();
         }
 
-        return total;
+        return total + costoDesplazamiento;
     }
 
-    /**
-     * @return código de la solicitud
-     */
     public String getCodigo() {
         return codigo;
     }
 
-    /**
-     * @return fecha de creación
-     */
     public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
 
-    /**
-     * @return cliente asociado
-     */
     public Cliente getCliente() {
         return cliente;
     }
 
-    /**
-     * @return lista no modificable de elementos
-     */
     public List<ElementoServicio> getElementos() {
         return Collections.unmodifiableList(elementos);
     }
 
-    /**
-     * @return fecha programada o null si no se estableció
-     */
     public LocalDate getFechaProgramada() {
         return fechaProgramada;
     }
 
-    /**
-     * @return observaciones adicionales
-     */
     public String getObservaciones() {
         return observaciones;
     }
 
-    /**
-     * @return prioridad de la solicitud
-     */
     public PrioridadSolicitud getPrioridad() {
         return prioridad;
+    }
+
+    public boolean isAtencionPresencial() {
+        return atencionPresencial;
+    }
+
+    public String getIdTecnico() {
+        return idTecnico;
+    }
+
+    public double getCostoDesplazamiento() {
+        return costoDesplazamiento;
     }
 }
