@@ -1,8 +1,8 @@
 package view;
 
 import controller.ControladorPaquetes;
-import model.ElementoServicio;
-import model.PaqueteServicios;
+import composite.ElementoServicio;
+import composite.PaqueteServicios;
 import model.ServicioTecnologico;
 import service.CatalogoService;
 

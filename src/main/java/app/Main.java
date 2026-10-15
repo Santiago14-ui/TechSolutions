@@ -1,5 +1,6 @@
 package app;
 
+import adapter.TecnicoInfo;
 import controller.ControladorPaquetes;
 import controller.ControladorPrincipal;
 import controller.ControladorSolicitudes;
@@ -159,7 +160,7 @@ public class Main extends Application {
                  codigoEspecialidad <= 3;
                  codigoEspecialidad++) {
 
-                model.TecnicoInfo tecnico =
+                TecnicoInfo tecnico =
                         controlador.getTecnicoService()
                                 .consultarTecnico(codigoEspecialidad);
 

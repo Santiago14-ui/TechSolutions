@@ -1,6 +1,6 @@
 package service;
 
-import model.PaqueteServicios;
+import composite.PaqueteServicios;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

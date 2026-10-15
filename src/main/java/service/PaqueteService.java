@@ -1,7 +1,7 @@
 
 package service;
 
-import model.PaqueteServicios;
+import composite.PaqueteServicios;
 
 import java.util.ArrayList;
 import java.util.Collections;

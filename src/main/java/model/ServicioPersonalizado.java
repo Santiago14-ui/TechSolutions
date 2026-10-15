@@ -1,6 +1,8 @@
 
 package model;
 
+import composite.ElementoServicio;
+
 /**
  * Representa un servicio tecnológico personalizado.
  */

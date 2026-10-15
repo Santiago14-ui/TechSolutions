@@ -1,8 +1,6 @@
-package builder;
+package model;
 
-import model.Cliente;
-import model.ElementoServicio;
-import model.PrioridadSolicitud;
+import composite.ElementoServicio;
 import service.SolicitudServicioService;
 
 import java.time.LocalDate;

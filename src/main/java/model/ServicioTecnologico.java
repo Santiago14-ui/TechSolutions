@@ -1,11 +1,8 @@
 
 package model;
 
-import adapter.LegacySupportAdapter;
+import composite.ElementoServicio;
 import decorator.ComplementoServicioTecnologico;
-import external.LegacySupport;
-
-import java.util.ArrayList;
 
 /**
  * Representa un servicio técnico de TechSolutions.

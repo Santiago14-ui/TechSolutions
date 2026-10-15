@@ -1,7 +1,6 @@
 package adapter;
 
 import external.LegacySupport;
-import model.TecnicoInfo;
 
 /**
  * Adapta la respuesta de LegacySupport al modelo de TechSolutions.

@@ -2,7 +2,7 @@ package service;
 
 import adapter.LegacySupportAdapter;
 import external.LegacySupport;
-import model.TecnicoInfo;
+import adapter.TecnicoInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

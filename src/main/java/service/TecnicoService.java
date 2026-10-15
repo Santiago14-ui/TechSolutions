@@ -2,7 +2,7 @@
 package service;
 
 import adapter.LegacySupportAdapter;
-import model.TecnicoInfo;
+import adapter.TecnicoInfo;
 
 /**
  * Gestiona las consultas de técnicos.

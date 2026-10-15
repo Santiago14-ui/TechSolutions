@@ -5,12 +5,12 @@ import decorator.AtencionDomicilio;
 import decorator.AtencionPrioritaria;
 import decorator.Soporte30Dias;
 import model.Cliente;
-import model.ElementoServicio;
+import composite.ElementoServicio;
 import model.PrioridadSolicitud;
-import model.PaqueteServicios;
+import composite.PaqueteServicios;
 import model.ServicioTecnologico;
 import model.Solicitud;
-import model.TecnicoInfo;
+import adapter.TecnicoInfo;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;

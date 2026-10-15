@@ -1,7 +1,7 @@
 package service;
 
-import builder.SolicitudServicio;
-import model.ElementoServicio;
+import model.SolicitudServicio;
+import composite.ElementoServicio;
 import model.Solicitud;
 
 import java.util.ArrayList;

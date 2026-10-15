@@ -1,16 +1,16 @@
 
 package controller;
 
-import builder.SolicitudServicio;
+import model.SolicitudServicio;
 import decorator.AtencionDomicilio;
 import decorator.AtencionPrioritaria;
 import decorator.Soporte30Dias;
 import model.Cliente;
-import model.ElementoServicio;
+import composite.ElementoServicio;
 import model.PrioridadSolicitud;
-import model.PaqueteServicios;
+import composite.PaqueteServicios;
 import model.ServicioTecnologico;
-import model.TecnicoInfo;
+import adapter.TecnicoInfo;
 import service.CatalogoService;
 import service.ClienteService;
 import service.PaqueteService;

@@ -1,5 +1,5 @@
 
-package model;
+package composite;
 
 /**
  * Define las operaciones comunes de los elementos de servicio.

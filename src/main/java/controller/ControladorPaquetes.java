@@ -1,8 +1,8 @@
 
 package controller;
 
-import model.ElementoServicio;
-import model.PaqueteServicios;
+import composite.ElementoServicio;
+import composite.PaqueteServicios;
 import service.PaqueteService;
 
 import java.util.List;

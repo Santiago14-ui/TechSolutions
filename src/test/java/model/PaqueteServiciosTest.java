@@ -1,5 +1,7 @@
 package model;
 
+import composite.ElementoServicio;
+import composite.PaqueteServicios;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

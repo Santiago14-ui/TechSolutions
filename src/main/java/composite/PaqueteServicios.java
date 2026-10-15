@@ -1,5 +1,5 @@
 
-package model;
+package composite;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -1,9 +1,7 @@
 package builder;
 
-import model.Cliente;
-import model.ElementoServicio;
-import model.PrioridadSolicitud;
-import model.ServicioTecnologico;
+import composite.ElementoServicio;
+import model.*;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;

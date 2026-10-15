@@ -1,5 +1,7 @@
 package model;
 
+import composite.ElementoServicio;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;

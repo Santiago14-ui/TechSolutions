@@ -1,5 +1,5 @@
 
-package model;
+package adapter;
 
 /**
  * Representa la información de un técnico consultado.

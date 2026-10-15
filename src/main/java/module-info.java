@@ -33,4 +33,6 @@ module java {
 
     opens service to javafx.fxml;
     exports service;
+    exports composite;
+    opens composite to javafx.fxml;
 }
