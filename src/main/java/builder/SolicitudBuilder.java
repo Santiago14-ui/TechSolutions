@@ -15,15 +15,28 @@ import java.util.List;
 public class SolicitudBuilder {
 
     private String codigo;
-    private LocalDate fechaCreacion = LocalDate.now();
+    private LocalDate fechaCreacion;
     private Cliente cliente;
-    private final List<ElementoServicio> elementos = new ArrayList<>();
+    private final List<ElementoServicio> elementos;
     private LocalDate fechaProgramada;
     private String observaciones;
-    private PrioridadSolicitud prioridad = PrioridadSolicitud.MEDIA;
+    private PrioridadSolicitud prioridad;
 
     /**
-     * Define el código de la solicitud.
+     * Inicializa el constructor con los valores predeterminados.
+     */
+    public SolicitudBuilder() {
+        this.fechaCreacion = LocalDate.now();
+        this.elementos = new ArrayList<>();
+        this.prioridad = PrioridadSolicitud.MEDIA;
+        this.observaciones = "";
+    }
+
+    /**
+     * Establece el código de la solicitud.
+     *
+     * @param codigo código único de la solicitud
+     * @return este constructor
      */
     public SolicitudBuilder codigo(String codigo) {
         this.codigo = codigo;
@@ -31,7 +44,10 @@ public class SolicitudBuilder {
     }
 
     /**
-     * Define la fecha de creación.
+     * Establece la fecha de creación.
+     *
+     * @param fechaCreacion fecha en que se crea la solicitud
+     * @return este constructor
      */
     public SolicitudBuilder fechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
@@ -39,7 +55,10 @@ public class SolicitudBuilder {
     }
 
     /**
-     * Define el cliente de la solicitud.
+     * Establece el cliente de la solicitud.
+     *
+     * @param cliente cliente asociado a la solicitud
+     * @return este constructor
      */
     public SolicitudBuilder cliente(Cliente cliente) {
         this.cliente = cliente;
@@ -48,20 +67,26 @@ public class SolicitudBuilder {
 
     /**
      * Agrega un servicio o paquete a la solicitud.
+     *
+     * @param elemento servicio o paquete que se agregará
+     * @return este constructor
      */
     public SolicitudBuilder agregarElemento(ElementoServicio elemento) {
         if (elemento == null) {
             throw new IllegalArgumentException(
-                    "El elemento de servicio no puede ser nulo."
+                    "El elemento de la solicitud no puede ser nulo."
             );
         }
 
-        elementos.add(elemento);
+        this.elementos.add(elemento);
         return this;
     }
 
     /**
-     * Define la fecha programada para la solicitud.
+     * Establece la fecha programada para la atención.
+     *
+     * @param fechaProgramada fecha programada, puede ser nula
+     * @return este constructor
      */
     public SolicitudBuilder fechaProgramada(LocalDate fechaProgramada) {
         this.fechaProgramada = fechaProgramada;
@@ -69,7 +94,10 @@ public class SolicitudBuilder {
     }
 
     /**
-     * Define las observaciones de la solicitud.
+     * Establece las observaciones de la solicitud.
+     *
+     * @param observaciones observaciones adicionales
+     * @return este constructor
      */
     public SolicitudBuilder observaciones(String observaciones) {
         this.observaciones = observaciones;
@@ -77,23 +105,52 @@ public class SolicitudBuilder {
     }
 
     /**
-     * Define la prioridad de la solicitud.
+     * Establece la prioridad de la solicitud.
+     *
+     * @param prioridad prioridad asignada
+     * @return este constructor
      */
     public SolicitudBuilder prioridad(PrioridadSolicitud prioridad) {
-        if (prioridad == null) {
-            throw new IllegalArgumentException(
-                    "La prioridad no puede ser nula."
-            );
-        }
-
         this.prioridad = prioridad;
         return this;
     }
 
     /**
-     * Construye y devuelve la solicitud.
+     * Construye y devuelve la solicitud con los datos configurados.
+     *
+     * @return solicitud construida
      */
     public Solicitud construir() {
+        if (codigo == null || codigo.isBlank()) {
+            throw new IllegalArgumentException(
+                    "El código de la solicitud es obligatorio."
+            );
+        }
+
+        if (fechaCreacion == null) {
+            throw new IllegalArgumentException(
+                    "La fecha de creación es obligatoria."
+            );
+        }
+
+        if (cliente == null) {
+            throw new IllegalArgumentException(
+                    "El cliente es obligatorio."
+            );
+        }
+
+        if (elementos.isEmpty()) {
+            throw new IllegalArgumentException(
+                    "Debe agregar al menos un servicio o paquete."
+            );
+        }
+
+        if (prioridad == null) {
+            throw new IllegalArgumentException(
+                    "La prioridad de la solicitud es obligatoria."
+            );
+        }
+
         return new Solicitud(
                 codigo,
                 fechaCreacion,
