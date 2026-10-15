@@ -31,12 +31,12 @@ class PaqueteServiciosTest {
     @Test
     void debeAgregarServicioAlPaquete() {
         PaqueteServicios paquete = crearPaquete();
-        Servicio servicio = crearServicio("SER-001", 80000);
+        ServicioTecnologico servicioTecnologico = crearServicio("SER-001", 80000);
 
-        paquete.agregarElemento(servicio);
+        paquete.agregarElemento(servicioTecnologico);
 
         assertEquals(1, paquete.getElementos().size());
-        assertTrue(paquete.getElementos().contains(servicio));
+        assertTrue(paquete.getElementos().contains(servicioTecnologico));
     }
 
     @Test
@@ -142,8 +142,8 @@ class PaqueteServiciosTest {
         );
     }
 
-    private Servicio crearServicio(String codigo, double costo) {
-        return new Servicio(
+    private ServicioTecnologico crearServicio(String codigo, double costo) {
+        return new ServicioTecnologico(
                 codigo,
                 "Servicio de prueba",
                 "Descripción del servicio de prueba.",

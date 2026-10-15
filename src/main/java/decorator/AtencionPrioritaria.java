@@ -1,26 +1,26 @@
 
 package decorator;
 
-import model.ElementoServicio;
+import model.ServicioTecnologico;
 
 /**
  * Añade atención prioritaria a un elemento de servicio.
  */
-public class AtencionPrioritaria extends ComplementoServicio {
+public class AtencionPrioritaria extends Complemento {
 
     private static final double COSTO_ADICIONAL = 35000;
 
-    public AtencionPrioritaria(ElementoServicio elemento) {
-        super(elemento);
+    @Override
+    public String descripcionComplemento() {
+        return "Atención prioritaria";
     }
 
     @Override
-    public String getNombre() {
-        return elemento.getNombre() + " con atención prioritaria";
+    public double costoPropio() {
+        return COSTO_ADICIONAL;
     }
 
-    @Override
-    public double calcularCosto() {
-        return elemento.calcularCosto() + COSTO_ADICIONAL;
+    public AtencionPrioritaria(ServicioTecnologico servicio) {
+        super(servicio);
     }
 }

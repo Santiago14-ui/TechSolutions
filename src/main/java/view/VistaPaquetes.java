@@ -3,7 +3,7 @@ package view;
 import controller.ControladorPaquetes;
 import model.ElementoServicio;
 import model.PaqueteServicios;
-import model.Servicio;
+import model.ServicioTecnologico;
 import service.CatalogoService;
 
 import javafx.geometry.Insets;
@@ -97,18 +97,18 @@ public class VistaPaquetes {
         VBox listaServicios = new VBox(8);
         List<CheckBox> casillasServicios = new ArrayList<>();
 
-        for (Servicio servicio : catalogoService.obtenerServicios()) {
+        for (ServicioTecnologico servicioTecnologico : catalogoService.obtenerServicios()) {
 
             CheckBox casilla = new CheckBox(
-                    servicio.getNombre()
+                    servicioTecnologico.getNombre()
                             + " | $"
                             + String.format(
                             "%,.0f",
-                            servicio.calcularCosto()
+                            servicioTecnologico.calcularCosto()
                     )
             );
 
-            casilla.setUserData(servicio);
+            casilla.setUserData(servicioTecnologico);
             casillasServicios.add(casilla);
             listaServicios.getChildren().add(casilla);
         }

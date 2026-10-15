@@ -4,7 +4,7 @@ import adapter.LegacySupportAdapter;
 import external.LegacySupport;
 import model.Cliente;
 import model.PrioridadSolicitud;
-import model.Servicio;
+import model.ServicioTecnologico;
 import model.Solicitud;
 import model.TecnicoInfo;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import service.CatalogoService;
 import service.ClienteService;
 import service.PaqueteService;
-import service.SolicitudService;
+import service.SolicitudServicioService;
 import service.TecnicoService;
 
 import java.time.LocalDate;
@@ -33,7 +33,7 @@ class ControladorSolicitudesTest {
                 new CatalogoService(),
                 new ClienteService(),
                 new PaqueteService(),
-                new SolicitudService(),
+                new SolicitudServicioService(),
                 new TecnicoService(
                         new LegacySupportAdapter(LegacySupport.getInstance())
                 )
@@ -48,7 +48,7 @@ class ControladorSolicitudesTest {
                         null,
                         new ClienteService(),
                         new PaqueteService(),
-                        new SolicitudService(),
+                        new SolicitudServicioService(),
                         new TecnicoService(
                                 new LegacySupportAdapter(LegacySupport.getInstance())
                         )
@@ -66,20 +66,20 @@ class ControladorSolicitudesTest {
 
     @Test
     void debeObtenerLosServiciosDelCatalogo() {
-        List<Servicio> servicios = controlador.obtenerServicios();
+        List<ServicioTecnologico> servicioTecnologicos = controlador.obtenerServicios();
 
-        assertEquals(4, servicios.size());
-        assertNotNull(servicios);
+        assertEquals(4, servicioTecnologicos.size());
+        assertNotNull(servicioTecnologicos);
     }
 
     @Test
     void debeAgregarElementoSeleccionado() {
-        Servicio servicio = crearServicio();
+        ServicioTecnologico servicioTecnologico = crearServicio();
 
-        controlador.agregarElemento(servicio);
+        controlador.agregarElemento(servicioTecnologico);
 
         assertEquals(1, controlador.obtenerElementosSeleccionados().size());
-        assertSame(servicio, controlador.obtenerElementosSeleccionados().getFirst());
+        assertSame(servicioTecnologico, controlador.obtenerElementosSeleccionados().getFirst());
     }
 
     @Test
@@ -213,8 +213,8 @@ class ControladorSolicitudesTest {
         );
     }
 
-    private Servicio crearServicio() {
-        return new Servicio(
+    private ServicioTecnologico crearServicio() {
+        return new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",

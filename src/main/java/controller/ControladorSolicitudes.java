@@ -1,7 +1,7 @@
 
 package controller;
 
-import builder.SolicitudBuilder;
+import builder.SolicitudServicio;
 import decorator.AtencionDomicilio;
 import decorator.AtencionPrioritaria;
 import decorator.Soporte30Dias;
@@ -9,13 +9,12 @@ import model.Cliente;
 import model.ElementoServicio;
 import model.PrioridadSolicitud;
 import model.PaqueteServicios;
-import model.Servicio;
-import model.Solicitud;
+import model.ServicioTecnologico;
 import model.TecnicoInfo;
 import service.CatalogoService;
 import service.ClienteService;
 import service.PaqueteService;
-import service.SolicitudService;
+import service.SolicitudServicioService;
 import service.TecnicoService;
 
 import java.time.LocalDate;
@@ -30,7 +29,7 @@ public class ControladorSolicitudes {
     private final CatalogoService catalogoService;
     private final ClienteService clienteService;
     private final PaqueteService paqueteService;
-    private final SolicitudService solicitudService;
+    private final SolicitudServicioService solicitudServicioService;
     private final TecnicoService tecnicoService;
 
     private final List<ElementoServicio> elementosSeleccionados;
@@ -42,13 +41,13 @@ public class ControladorSolicitudes {
             CatalogoService catalogoService,
             ClienteService clienteService,
             PaqueteService paqueteService,
-            SolicitudService solicitudService,
+            SolicitudServicioService solicitudServicioService,
             TecnicoService tecnicoService) {
 
         if (catalogoService == null
                 || clienteService == null
                 || paqueteService == null
-                || solicitudService == null
+                || solicitudServicioService == null
                 || tecnicoService == null) {
 
             throw new IllegalArgumentException(
@@ -59,7 +58,7 @@ public class ControladorSolicitudes {
         this.catalogoService = catalogoService;
         this.clienteService = clienteService;
         this.paqueteService = paqueteService;
-        this.solicitudService = solicitudService;
+        this.solicitudServicioService = solicitudServicioService;
         this.tecnicoService = tecnicoService;
 
         this.elementosSeleccionados = new ArrayList<>();
@@ -75,7 +74,7 @@ public class ControladorSolicitudes {
     /**
      * Obtiene los servicios del catálogo.
      */
-    public List<Servicio> obtenerServicios() {
+    public List<ServicioTecnologico> obtenerServicios() {
         return catalogoService.obtenerServicios();
     }
 
@@ -164,7 +163,7 @@ public class ControladorSolicitudes {
      * Conserva la firma original para las llamadas existentes.
      * Por defecto, registra una solicitud no presencial.
      */
-    public Solicitud registrarSolicitud(
+    public model.Solicitud registrarSolicitud(
             String codigo,
             String documentoCliente,
             LocalDate fechaProgramada,
@@ -186,7 +185,7 @@ public class ControladorSolicitudes {
      * Registra una solicitud mediante Builder, incluyendo
      * la modalidad de atención y el costo de desplazamiento.
      */
-    public Solicitud registrarSolicitud(
+    public model.Solicitud registrarSolicitud(
             String codigo,
             String documentoCliente,
             LocalDate fechaProgramada,
@@ -229,7 +228,7 @@ public class ControladorSolicitudes {
             );
         }
 
-        SolicitudBuilder builder = new SolicitudBuilder()
+        SolicitudServicio builder = new SolicitudServicio()
                 .codigo(codigo)
                 .fechaCreacion(LocalDate.now())
                 .cliente(cliente)
@@ -250,9 +249,9 @@ public class ControladorSolicitudes {
             builder.atencionNoPresencial();
         }
 
-        Solicitud solicitud = builder.construir();
+        model.Solicitud solicitud = builder.construir();
 
-        solicitudService.registrarSolicitud(solicitud);
+        solicitudServicioService.registrarSolicitud(solicitud);
 
         elementosSeleccionados.clear();
 
@@ -262,15 +261,15 @@ public class ControladorSolicitudes {
     /**
      * Busca una solicitud por su código.
      */
-    public Solicitud buscarPorCodigo(String codigo) {
-        return solicitudService.buscarPorCodigo(codigo);
+    public model.Solicitud buscarPorCodigo(String codigo) {
+        return solicitudServicioService.buscarPorCodigo(codigo);
     }
 
     /**
      * Obtiene las solicitudes registradas.
      */
-    public List<Solicitud> obtenerSolicitudes() {
-        return solicitudService.obtenerSolicitudes();
+    public List<model.Solicitud> obtenerSolicitudes() {
+        return solicitudServicioService.obtenerSolicitudes();
     }
 
     /**
@@ -284,11 +283,11 @@ public class ControladorSolicitudes {
      * Calcula el costo total de una solicitud.
      */
     public double calcularCostoTotal(
-            Solicitud solicitud,
+            model.Solicitud solicitud,
             boolean atencionPresencial,
             TecnicoInfo tecnico) {
 
-        return solicitudService.calcularCostoTotal(
+        return solicitudServicioService.calcularCostoTotal(
                 solicitud,
                 atencionPresencial,
                 tecnico

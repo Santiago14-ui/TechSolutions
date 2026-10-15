@@ -1,7 +1,7 @@
 
 package factory;
 
-import model.Servicio;
+import model.ServicioTecnologico;
 
 /**
  * Fábrica de recuperación de información.
@@ -9,8 +9,8 @@ import model.Servicio;
 public class RecuperacionInformacionFactory extends ServicioFactory {
 
     @Override
-    public Servicio crearServicio() {
-        return new Servicio(
+    public ServicioTecnologico crearServicio() {
+        return new ServicioTecnologico(
                 "SER-004",
                 "Recuperación de información",
                 "Recuperación de datos y archivos.",

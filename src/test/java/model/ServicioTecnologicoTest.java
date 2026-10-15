@@ -7,55 +7,55 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Pruebas unitarias para la clase Servicio.
  */
-class ServicioTest {
+class ServicioTecnologicoTest {
 
     @Test
     void debeCrearServicioConDatosCorrectos() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
                 80000
         );
 
-        assertEquals("SER-001", servicio.getCodigo());
-        assertEquals("Mantenimiento preventivo", servicio.getNombre());
+        assertEquals("SER-001", servicioTecnologico.getCodigo());
+        assertEquals("Mantenimiento preventivo", servicioTecnologico.getNombre());
         assertEquals(
                 "Revisión y mantenimiento preventivo de equipos.",
-                servicio.getDescripcion()
+                servicioTecnologico.getDescripcion()
         );
-        assertEquals(80000, servicio.getCostoBase(), 0.001);
+        assertEquals(80000, servicioTecnologico.getCostoBase(), 0.001);
     }
 
     @Test
     void debeCalcularCostoBaseCorrectamente() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión de equipos.",
                 80000
         );
 
-        assertEquals(80000, servicio.calcularCosto(), 0.001);
+        assertEquals(80000, servicioTecnologico.calcularCosto(), 0.001);
     }
 
     @Test
     void debePermitirCostoCero() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-000",
                 "Diagnóstico",
                 "Evaluación inicial del equipo.",
                 0
         );
 
-        assertEquals(0, servicio.calcularCosto(), 0.001);
+        assertEquals(0, servicioTecnologico.calcularCosto(), 0.001);
     }
 
     @Test
     void debeRechazarCodigoNulo() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Servicio(
+                () -> new ServicioTecnologico(
                         null,
                         "Mantenimiento preventivo",
                         "Revisión de equipos.",
@@ -68,7 +68,7 @@ class ServicioTest {
     void debeRechazarCodigoVacio() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Servicio(
+                () -> new ServicioTecnologico(
                         " ",
                         "Mantenimiento preventivo",
                         "Revisión de equipos.",
@@ -81,7 +81,7 @@ class ServicioTest {
     void debeRechazarNombreNulo() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Servicio(
+                () -> new ServicioTecnologico(
                         "SER-001",
                         null,
                         "Revisión de equipos.",
@@ -94,7 +94,7 @@ class ServicioTest {
     void debeRechazarDescripcionVacia() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Servicio(
+                () -> new ServicioTecnologico(
                         "SER-001",
                         "Mantenimiento preventivo",
                         "",
@@ -107,7 +107,7 @@ class ServicioTest {
     void debeRechazarCostoNegativo() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> new Servicio(
+                () -> new ServicioTecnologico(
                         "SER-001",
                         "Mantenimiento preventivo",
                         "Revisión de equipos.",

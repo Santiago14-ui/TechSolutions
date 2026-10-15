@@ -13,7 +13,7 @@ public class PaqueteServicios implements ElementoServicio {
     private String codigo;
     private String nombre;
     private String descripcion;
-    private List<ElementoServicio> elementos;
+    private List<ElementoServicio> elementosServicios;
 
     public PaqueteServicios(String codigo, String nombre, String descripcion) {
         if (codigo == null || codigo.isBlank()) {
@@ -31,7 +31,7 @@ public class PaqueteServicios implements ElementoServicio {
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
-        this.elementos = new ArrayList<>();
+        this.elementosServicios = new ArrayList<>();
     }
 
     public void agregarElemento(ElementoServicio elemento) {
@@ -52,7 +52,7 @@ public class PaqueteServicios implements ElementoServicio {
             );
         }
 
-        elementos.add(elemento);
+        elementosServicios.add(elemento);
     }
 
     private boolean contienePaquete(PaqueteServicios buscado) {
@@ -60,7 +60,7 @@ public class PaqueteServicios implements ElementoServicio {
             return true;
         }
 
-        for (ElementoServicio elemento : elementos) {
+        for (ElementoServicio elemento : elementosServicios) {
             if (elemento instanceof PaqueteServicios paquete
                     && paquete.contienePaquete(buscado)) {
                 return true;
@@ -71,7 +71,7 @@ public class PaqueteServicios implements ElementoServicio {
     }
 
     public List<ElementoServicio> getElementos() {
-        return Collections.unmodifiableList(elementos);
+        return Collections.unmodifiableList(elementosServicios);
     }
 
     public String getCodigo() {
@@ -92,10 +92,28 @@ public class PaqueteServicios implements ElementoServicio {
     public double calcularCosto() {
         double total = 0;
 
-        for (ElementoServicio elemento : elementos) {
+        for (ElementoServicio elemento : elementosServicios) {
             total += elemento.calcularCosto();
         }
 
         return total;
+    }
+
+    @Override
+    public void mostrarElemento(String identacion) {
+        System.out.println(this);
+        for (ElementoServicio elemento : elementosServicios) {
+            elemento.mostrarElemento(identacion + "   ");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "PaqueteServicios{" +
+                "codigo='" + codigo + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", elementos=" + elementosServicios +
+                '}';
     }
 }

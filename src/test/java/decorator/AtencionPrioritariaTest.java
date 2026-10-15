@@ -1,6 +1,6 @@
 package decorator;
 
-import model.Servicio;
+import model.ServicioTecnologico;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,7 +12,7 @@ class AtencionPrioritariaTest {
 
     @Test
     void debeAgregarCostoDeAtencionPrioritaria() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
@@ -20,14 +20,14 @@ class AtencionPrioritariaTest {
         );
 
         AtencionPrioritaria servicioPrioritario =
-                new AtencionPrioritaria(servicio);
+                new AtencionPrioritaria(servicioTecnologico);
 
         assertEquals(115000, servicioPrioritario.calcularCosto(), 0.001);
     }
 
     @Test
     void debeAgregarAtencionPrioritariaAlNombre() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
@@ -35,7 +35,7 @@ class AtencionPrioritariaTest {
         );
 
         AtencionPrioritaria servicioPrioritario =
-                new AtencionPrioritaria(servicio);
+                new AtencionPrioritaria(servicioTecnologico);
 
         assertEquals(
                 "Mantenimiento preventivo con atención prioritaria",
@@ -45,7 +45,7 @@ class AtencionPrioritariaTest {
 
     @Test
     void debeCalcularCorrectamenteElCostoDeUnServicioGratuito() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-000",
                 "Servicio gratuito",
                 "Servicio de prueba sin costo base.",
@@ -53,14 +53,14 @@ class AtencionPrioritariaTest {
         );
 
         AtencionPrioritaria servicioPrioritario =
-                new AtencionPrioritaria(servicio);
+                new AtencionPrioritaria(servicioTecnologico);
 
         assertEquals(35000, servicioPrioritario.calcularCosto(), 0.001);
     }
 
     @Test
     void noDebeModificarElCostoOriginalDelServicio() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
@@ -68,9 +68,9 @@ class AtencionPrioritariaTest {
         );
 
         AtencionPrioritaria servicioPrioritario =
-                new AtencionPrioritaria(servicio);
+                new AtencionPrioritaria(servicioTecnologico);
 
-        assertEquals(80000, servicio.calcularCosto(), 0.001);
+        assertEquals(80000, servicioTecnologico.calcularCosto(), 0.001);
         assertEquals(115000, servicioPrioritario.calcularCosto(), 0.001);
     }
 }

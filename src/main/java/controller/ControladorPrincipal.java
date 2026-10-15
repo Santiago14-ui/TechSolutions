@@ -6,7 +6,7 @@ import external.LegacySupport;
 import service.CatalogoService;
 import service.ClienteService;
 import service.PaqueteService;
-import service.SolicitudService;
+import service.SolicitudServicioService;
 import service.TecnicoService;
 
 /**
@@ -17,7 +17,7 @@ public class ControladorPrincipal {
 
     private final CatalogoService catalogoService;
     private final ClienteService clienteService;
-    private final SolicitudService solicitudService;
+    private final SolicitudServicioService solicitudServicioService;
     private final TecnicoService tecnicoService;
     private final PaqueteService paqueteService;
 
@@ -27,7 +27,7 @@ public class ControladorPrincipal {
     public ControladorPrincipal() {
         catalogoService = new CatalogoService();
         clienteService = new ClienteService();
-        solicitudService = new SolicitudService();
+        solicitudServicioService = new SolicitudServicioService();
         paqueteService = new PaqueteService();
 
         LegacySupport legacySupport = LegacySupport.getInstance();
@@ -59,8 +59,8 @@ public class ControladorPrincipal {
      *
      * @return servicio de solicitudes
      */
-    public SolicitudService getSolicitudService() {
-        return solicitudService;
+    public SolicitudServicioService getSolicitudService() {
+        return solicitudServicioService;
     }
 
     /**

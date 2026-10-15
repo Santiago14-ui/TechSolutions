@@ -3,8 +3,7 @@ package builder;
 import model.Cliente;
 import model.ElementoServicio;
 import model.PrioridadSolicitud;
-import model.Servicio;
-import model.Solicitud;
+import model.ServicioTecnologico;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * Pruebas unitarias para la clase SolicitudBuilder.
  */
-class SolicitudBuilderTest {
+class SolicitudServicioTecnologicoTest {
 
     private Cliente crearCliente() {
         return new Cliente(
@@ -24,8 +23,8 @@ class SolicitudBuilderTest {
         );
     }
 
-    private Servicio crearServicio() {
-        return new Servicio(
+    private ServicioTecnologico crearServicio() {
+        return new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
@@ -33,17 +32,17 @@ class SolicitudBuilderTest {
         );
     }
 
-    private SolicitudBuilder crearBuilderValido() {
-        return new SolicitudBuilder()
-                .codigo("SOL-001")
-                .fechaCreacion(LocalDate.of(2026, 10, 15))
-                .cliente(crearCliente())
-                .agregarElemento(crearServicio());
+    private SolicitudServicio crearBuilderValido() {
+        return new SolicitudServicio.Builder(
+                "SOL-001",
+                LocalDate.of(2026, 10, 15),
+                crearCliente(),
+                crearServicio()).build();
     }
 
     @Test
     void debeConstruirSolicitudConDatosCorrectos() {
-        Solicitud solicitud = crearBuilderValido().construir();
+        model.Solicitud solicitud = crearBuilderValido().construir();
 
         assertEquals("SOL-001", solicitud.getCodigo());
         assertEquals(
@@ -56,14 +55,14 @@ class SolicitudBuilderTest {
 
     @Test
     void debeAsignarPrioridadMediaPorDefecto() {
-        Solicitud solicitud = crearBuilderValido().construir();
+        model.Solicitud solicitud = crearBuilderValido().construir();
 
         assertEquals(PrioridadSolicitud.MEDIA, solicitud.getPrioridad());
     }
 
     @Test
     void debePermitirCambiarLaPrioridad() {
-        Solicitud solicitud = crearBuilderValido()
+        model.Solicitud solicitud = crearBuilderValido()
                 .prioridad(PrioridadSolicitud.ALTA)
                 .construir();
 
@@ -72,15 +71,15 @@ class SolicitudBuilderTest {
 
     @Test
     void debeAgregarVariosElementos() {
-        Servicio segundoServicio = new Servicio(
+        ServicioTecnologico segundoServicioTecnologico = new ServicioTecnologico(
                 "SER-002",
                 "Mantenimiento correctivo",
                 "Reparación de equipos.",
                 120000
         );
 
-        Solicitud solicitud = crearBuilderValido()
-                .agregarElemento(segundoServicio)
+        model.Solicitud solicitud = crearBuilderValido()
+                .agregarElemento(segundoServicioTecnologico)
                 .construir();
 
         assertEquals(2, solicitud.getElementos().size());
@@ -91,7 +90,7 @@ class SolicitudBuilderTest {
     void debeGuardarFechaProgramada() {
         LocalDate fecha = LocalDate.of(2026, 11, 1);
 
-        Solicitud solicitud = crearBuilderValido()
+        model.Solicitud solicitud = crearBuilderValido()
                 .fechaProgramada(fecha)
                 .construir();
 
@@ -100,7 +99,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeGuardarObservaciones() {
-        Solicitud solicitud = crearBuilderValido()
+        model.Solicitud solicitud = crearBuilderValido()
                 .observaciones("Atender en horario de la mañana")
                 .construir();
 
@@ -112,7 +111,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeRechazarCodigoNulo() {
-        SolicitudBuilder builder = crearBuilderValido()
+        SolicitudServicio builder = crearBuilderValido()
                 .codigo(null);
 
         assertThrows(
@@ -123,7 +122,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeRechazarCodigoVacio() {
-        SolicitudBuilder builder = crearBuilderValido()
+        SolicitudServicio builder = crearBuilderValido()
                 .codigo(" ");
 
         assertThrows(
@@ -134,7 +133,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeRechazarFechaDeCreacionNula() {
-        SolicitudBuilder builder = crearBuilderValido()
+        SolicitudServicio builder = crearBuilderValido()
                 .fechaCreacion(null);
 
         assertThrows(
@@ -145,7 +144,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeRechazarClienteNulo() {
-        SolicitudBuilder builder = crearBuilderValido()
+        SolicitudServicio builder = crearBuilderValido()
                 .cliente(null);
 
         assertThrows(
@@ -156,7 +155,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeRechazarSolicitudSinElementos() {
-        SolicitudBuilder builder = new SolicitudBuilder()
+        SolicitudServicio builder = new SolicitudServicio()
                 .codigo("SOL-002")
                 .cliente(crearCliente());
 
@@ -168,7 +167,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeRechazarAgregarElementoNulo() {
-        SolicitudBuilder builder = new SolicitudBuilder();
+        SolicitudServicio builder = new SolicitudServicio();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -178,7 +177,7 @@ class SolicitudBuilderTest {
 
     @Test
     void debeRechazarPrioridadNula() {
-        SolicitudBuilder builder = crearBuilderValido()
+        SolicitudServicio builder = crearBuilderValido()
                 .prioridad(null);
 
         assertThrows(

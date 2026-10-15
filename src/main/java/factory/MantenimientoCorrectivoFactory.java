@@ -1,7 +1,7 @@
 
 package factory;
 
-import model.Servicio;
+import model.ServicioTecnologico;
 
 /**
  * Fábrica de mantenimiento correctivo.
@@ -9,8 +9,8 @@ import model.Servicio;
 public class MantenimientoCorrectivoFactory extends ServicioFactory {
 
     @Override
-    public Servicio crearServicio() {
-        return new Servicio(
+    public ServicioTecnologico crearServicio() {
+        return new ServicioTecnologico(
                 "SER-002",
                 "Mantenimiento correctivo",
                 "Diagnóstico y reparación de equipos.",

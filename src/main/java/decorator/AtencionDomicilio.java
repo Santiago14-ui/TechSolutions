@@ -1,26 +1,26 @@
 
 package decorator;
 
-import model.ElementoServicio;
+import model.ServicioTecnologico;
 
 /**
  * Añade atención a domicilio a un elemento de servicio.
  */
-public class AtencionDomicilio extends ComplementoServicio {
+public class AtencionDomicilio extends Complemento {
 
     private static final double COSTO_ADICIONAL = 25000;
 
-    public AtencionDomicilio(ElementoServicio elemento) {
-        super(elemento);
+    public AtencionDomicilio(ServicioTecnologico servicio) {
+        super(servicio);
     }
 
     @Override
-    public String getNombre() {
-        return elemento.getNombre() + " con atención a domicilio";
+    public String descripcionComplemento() {
+        return "Atención a domicilio";
     }
 
     @Override
-    public double calcularCosto() {
-        return elemento.calcularCosto() + COSTO_ADICIONAL;
+    public double costoPropio() {
+        return COSTO_ADICIONAL;
     }
 }

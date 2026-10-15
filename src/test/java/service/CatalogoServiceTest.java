@@ -1,6 +1,6 @@
 package service;
 
-import model.Servicio;
+import model.ServicioTecnologico;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -16,41 +16,41 @@ class CatalogoServiceTest {
     void debeCargarLosCuatroServiciosIniciales() {
         CatalogoService catalogo = new CatalogoService();
 
-        List<Servicio> servicios = catalogo.obtenerServicios();
+        List<ServicioTecnologico> servicioTecnologicos = catalogo.obtenerServicios();
 
-        assertEquals(4, servicios.size());
+        assertEquals(4, servicioTecnologicos.size());
     }
 
     @Test
     void debeEncontrarMantenimientoPreventivoPorCodigo() {
         CatalogoService catalogo = new CatalogoService();
 
-        Servicio servicio = catalogo.buscarPorCodigo("SER-001");
+        ServicioTecnologico servicioTecnologico = catalogo.buscarPorCodigo("SER-001");
 
-        assertNotNull(servicio);
-        assertEquals("Mantenimiento preventivo", servicio.getNombre());
-        assertEquals(80000, servicio.calcularCosto(), 0.001);
+        assertNotNull(servicioTecnologico);
+        assertEquals("Mantenimiento preventivo", servicioTecnologico.getNombre());
+        assertEquals(80000, servicioTecnologico.calcularCosto(), 0.001);
     }
 
     @Test
     void debeEncontrarMantenimientoCorrectivoPorCodigo() {
         CatalogoService catalogo = new CatalogoService();
 
-        Servicio servicio = catalogo.buscarPorCodigo("SER-002");
+        ServicioTecnologico servicioTecnologico = catalogo.buscarPorCodigo("SER-002");
 
-        assertNotNull(servicio);
-        assertEquals("Mantenimiento correctivo", servicio.getNombre());
-        assertEquals(120000, servicio.calcularCosto(), 0.001);
+        assertNotNull(servicioTecnologico);
+        assertEquals("Mantenimiento correctivo", servicioTecnologico.getNombre());
+        assertEquals(120000, servicioTecnologico.calcularCosto(), 0.001);
     }
 
     @Test
     void debeIgnorarMayusculasYMinusculasEnLaBusqueda() {
         CatalogoService catalogo = new CatalogoService();
 
-        Servicio servicio = catalogo.buscarPorCodigo("ser-001");
+        ServicioTecnologico servicioTecnologico = catalogo.buscarPorCodigo("ser-001");
 
-        assertNotNull(servicio);
-        assertEquals("SER-001", servicio.getCodigo());
+        assertNotNull(servicioTecnologico);
+        assertEquals("SER-001", servicioTecnologico.getCodigo());
     }
 
     @Test
@@ -78,11 +78,11 @@ class CatalogoServiceTest {
     void noDebePermitirModificarLaListaDelCatalogo() {
         CatalogoService catalogo = new CatalogoService();
 
-        List<Servicio> servicios = catalogo.obtenerServicios();
+        List<ServicioTecnologico> servicioTecnologicos = catalogo.obtenerServicios();
 
         assertThrows(
                 UnsupportedOperationException.class,
-                servicios::clear
+                servicioTecnologicos::clear
         );
 
         assertEquals(4, catalogo.obtenerServicios().size());

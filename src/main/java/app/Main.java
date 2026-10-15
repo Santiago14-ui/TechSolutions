@@ -13,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import model.Servicio;
+import model.ServicioTecnologico;
 import view.VistaPaquetes;
 import view.VistaSolicitudes;
 
@@ -67,15 +67,15 @@ public class Main extends Application {
 
         VBox listaServicios = new VBox(8);
 
-        for (Servicio servicio :
+        for (ServicioTecnologico servicioTecnologico :
                 controlador.getCatalogoService().obtenerServicios()) {
 
             Label informacion = new Label(
-                    servicio.getNombre()
+                    servicioTecnologico.getNombre()
                             + " | $"
                             + String.format(
                             "%,.0f",
-                            servicio.calcularCosto()
+                            servicioTecnologico.calcularCosto()
                     )
             );
 

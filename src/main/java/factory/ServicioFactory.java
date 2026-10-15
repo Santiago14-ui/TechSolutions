@@ -1,12 +1,12 @@
 
 package factory;
 
-import model.Servicio;
+import model.ServicioTecnologico;
 
 /**
  * Fábrica base para crear servicios.
  */
 public abstract class ServicioFactory {
 
-    public abstract Servicio crearServicio();
+    public abstract ServicioTecnologico crearServicio();
 }

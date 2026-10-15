@@ -6,7 +6,7 @@ import factory.MantenimientoCorrectivoFactory;
 import factory.MantenimientoPreventivoFactory;
 import factory.RecuperacionInformacionFactory;
 import factory.ServicioFactory;
-import model.Servicio;
+import model.ServicioTecnologico;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -17,10 +17,10 @@ import java.util.List;
  */
 public class CatalogoService {
 
-    private final List<Servicio> servicios;
+    private final List<ServicioTecnologico> servicioTecnologicos;
 
     public CatalogoService() {
-        servicios = new ArrayList<>();
+        servicioTecnologicos = new ArrayList<>();
 
         cargarServiciosIniciales();
     }
@@ -33,21 +33,21 @@ public class CatalogoService {
     }
 
     private void agregarServicio(ServicioFactory factory) {
-        servicios.add(factory.crearServicio());
+        servicioTecnologicos.add(factory.crearServicio());
     }
 
-    public List<Servicio> obtenerServicios() {
-        return Collections.unmodifiableList(servicios);
+    public List<ServicioTecnologico> obtenerServicios() {
+        return Collections.unmodifiableList(servicioTecnologicos);
     }
 
-    public Servicio buscarPorCodigo(String codigo) {
+    public ServicioTecnologico buscarPorCodigo(String codigo) {
         if (codigo == null || codigo.isBlank()) {
             return null;
         }
 
-        for (Servicio servicio : servicios) {
-            if (servicio.getCodigo().equalsIgnoreCase(codigo)) {
-                return servicio;
+        for (ServicioTecnologico servicioTecnologico : servicioTecnologicos) {
+            if (servicioTecnologico.getCodigo().equalsIgnoreCase(codigo)) {
+                return servicioTecnologico;
             }
         }
 

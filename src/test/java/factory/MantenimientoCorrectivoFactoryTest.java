@@ -1,6 +1,6 @@
 package factory;
 
-import model.Servicio;
+import model.ServicioTecnologico;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,16 +15,16 @@ class MantenimientoCorrectivoFactoryTest {
         MantenimientoCorrectivoFactory factory =
                 new MantenimientoCorrectivoFactory();
 
-        Servicio servicio = factory.crearServicio();
+        ServicioTecnologico servicioTecnologico = factory.crearServicio();
 
-        assertNotNull(servicio);
-        assertEquals("SER-002", servicio.getCodigo());
-        assertEquals("Mantenimiento correctivo", servicio.getNombre());
+        assertNotNull(servicioTecnologico);
+        assertEquals("SER-002", servicioTecnologico.getCodigo());
+        assertEquals("Mantenimiento correctivo", servicioTecnologico.getNombre());
         assertEquals(
                 "Diagnóstico y reparación de equipos.",
-                servicio.getDescripcion()
+                servicioTecnologico.getDescripcion()
         );
-        assertEquals(120000, servicio.calcularCosto(), 0.001);
+        assertEquals(120000, servicioTecnologico.calcularCosto(), 0.001);
     }
 
     @Test
@@ -32,9 +32,9 @@ class MantenimientoCorrectivoFactoryTest {
         MantenimientoCorrectivoFactory factory =
                 new MantenimientoCorrectivoFactory();
 
-        Servicio servicio = factory.crearServicio();
+        ServicioTecnologico servicioTecnologico = factory.crearServicio();
 
-        assertEquals(120000, servicio.getCostoBase(), 0.001);
+        assertEquals(120000, servicioTecnologico.getCostoBase(), 0.001);
     }
 
     @Test
@@ -42,14 +42,14 @@ class MantenimientoCorrectivoFactoryTest {
         MantenimientoCorrectivoFactory factory =
                 new MantenimientoCorrectivoFactory();
 
-        Servicio servicio1 = factory.crearServicio();
-        Servicio servicio2 = factory.crearServicio();
+        ServicioTecnologico servicioTecnologico1 = factory.crearServicio();
+        ServicioTecnologico servicioTecnologico2 = factory.crearServicio();
 
-        assertNotSame(servicio1, servicio2);
-        assertEquals(servicio1.getCodigo(), servicio2.getCodigo());
+        assertNotSame(servicioTecnologico1, servicioTecnologico2);
+        assertEquals(servicioTecnologico1.getCodigo(), servicioTecnologico2.getCodigo());
         assertEquals(
-                servicio1.calcularCosto(),
-                servicio2.calcularCosto(),
+                servicioTecnologico1.calcularCosto(),
+                servicioTecnologico2.calcularCosto(),
                 0.001
         );
     }

@@ -1,17 +1,28 @@
 
 package model;
 
+import adapter.LegacySupportAdapter;
+import decorator.ComplementoServicioTecnologico;
+import external.LegacySupport;
+
+import java.util.ArrayList;
+
 /**
  * Representa un servicio técnico de TechSolutions.
+ * Utiliza composite y decorator
  */
-public class Servicio implements ElementoServicio {
+public class ServicioTecnologico implements ElementoServicio, ComplementoServicioTecnologico {
 
+    /**
+     * Atributos
+     */
+    //Datos obligatorios
     private String codigo;
     private String nombre;
     private String descripcion;
     private double costoBase;
 
-    public Servicio(String codigo, String nombre, String descripcion, double costoBase) {
+    public ServicioTecnologico(String codigo, String nombre, String descripcion, double costoBase) {
         if (codigo == null || codigo.isBlank()) {
             throw new IllegalArgumentException("El código es obligatorio.");
         }
@@ -53,7 +64,32 @@ public class Servicio implements ElementoServicio {
     }
 
     @Override
+    public void mostrarElemento(String identacion) {
+        System.out.println(identacion + this);
+    }
+
+    @Override
+    public String toString() {
+        return "ServicioTecnologico{" +
+                "codigo='" + codigo + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", costoBase=" + costoBase +
+                '}';
+    }
+
+    @Override
     public double calcularCosto() {
-        return costoBase;
+        return costoBase + costoAdicional();
+    }
+
+    @Override
+    public String descripcion() {
+        return descripcion;
+    }
+
+    @Override
+    public double costoAdicional() {
+        return 0;
     }
 }

@@ -1,26 +1,26 @@
 
 package decorator;
 
-import model.ElementoServicio;
+import model.ServicioTecnologico;
 
 /**
  * Añade soporte técnico durante 30 días.
  */
-public class Soporte30Dias extends ComplementoServicio {
+public class Soporte30Dias extends Complemento {
 
     private static final double COSTO_ADICIONAL = 50000;
 
-    public Soporte30Dias(ElementoServicio elemento) {
-        super(elemento);
+    public Soporte30Dias(ServicioTecnologico servicio) {
+        super(servicio);
     }
 
     @Override
-    public String getNombre() {
-        return elemento.getNombre() + " con soporte técnico por 30 días";
+    public String descripcionComplemento() {
+        return "Soporte por 30 dias";
     }
 
     @Override
-    public double calcularCosto() {
-        return elemento.calcularCosto() + COSTO_ADICIONAL;
+    public double costoPropio() {
+        return COSTO_ADICIONAL;
     }
 }

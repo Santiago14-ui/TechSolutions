@@ -1,6 +1,6 @@
 package decorator;
 
-import model.Servicio;
+import model.ServicioTecnologico;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -12,28 +12,28 @@ class Soporte30DiasTest {
 
     @Test
     void debeAgregarCostoDeSoporteTecnico() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
                 80000
         );
 
-        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicio);
+        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicioTecnologico);
 
         assertEquals(130000, servicioConSoporte.calcularCosto(), 0.001);
     }
 
     @Test
     void debeAgregarSoporteTecnicoAlNombre() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
                 80000
         );
 
-        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicio);
+        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicioTecnologico);
 
         assertEquals(
                 "Mantenimiento preventivo con soporte técnico por 30 días",
@@ -43,30 +43,30 @@ class Soporte30DiasTest {
 
     @Test
     void debeCalcularElCostoCuandoElServicioBaseEsGratuito() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-000",
                 "Servicio gratuito",
                 "Servicio de prueba sin costo base.",
                 0
         );
 
-        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicio);
+        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicioTecnologico);
 
         assertEquals(50000, servicioConSoporte.calcularCosto(), 0.001);
     }
 
     @Test
     void noDebeModificarElCostoOriginalDelServicio() {
-        Servicio servicio = new Servicio(
+        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
                 "SER-001",
                 "Mantenimiento preventivo",
                 "Revisión y mantenimiento preventivo de equipos.",
                 80000
         );
 
-        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicio);
+        Soporte30Dias servicioConSoporte = new Soporte30Dias(servicioTecnologico);
 
-        assertEquals(80000, servicio.calcularCosto(), 0.001);
+        assertEquals(80000, servicioTecnologico.calcularCosto(), 0.001);
         assertEquals(130000, servicioConSoporte.calcularCosto(), 0.001);
     }
 }
