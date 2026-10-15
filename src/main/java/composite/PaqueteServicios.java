@@ -101,7 +101,7 @@ public class PaqueteServicios implements ElementoServicio {
 
     @Override
     public void mostrarElemento(String identacion) {
-        System.out.println(this);
+        System.out.println(identacion + this);
         for (ElementoServicio elemento : elementosServicios) {
             elemento.mostrarElemento(identacion + "   ");
         }
@@ -113,7 +113,6 @@ public class PaqueteServicios implements ElementoServicio {
                 "codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
-                ", elementos=" + elementosServicios +
                 '}';
     }
 }

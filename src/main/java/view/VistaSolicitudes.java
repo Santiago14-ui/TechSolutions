@@ -9,7 +9,6 @@ import composite.ElementoServicio;
 import model.PrioridadSolicitud;
 import composite.PaqueteServicios;
 import model.ServicioTecnologico;
-import model.Solicitud;
 import adapter.TecnicoInfo;
 
 import javafx.geometry.Insets;

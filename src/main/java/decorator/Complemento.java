@@ -1,9 +1,11 @@
 package decorator;
 
+import composite.ElementoServicio;
+
 /**
  * Clase padre que recibe el objeto a modificar
  */
-public abstract class Complemento implements ComplementoServicioTecnologico {
+public abstract class Complemento implements ComplementoServicioTecnologico, ElementoServicio {
 
     protected final ComplementoServicioTecnologico servicio;
 

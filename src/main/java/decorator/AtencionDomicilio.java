@@ -23,4 +23,19 @@ public class AtencionDomicilio extends Complemento {
     public double costoPropio() {
         return COSTO_ADICIONAL;
     }
+
+    @Override
+    public String getNombre() {
+        return "";
+    }
+
+    @Override
+    public String getDescripcion() {
+        return "";
+    }
+
+    @Override
+    public void mostrarElemento(String identacion) {
+
+    }
 }

@@ -3,7 +3,7 @@ package composite;
 
 /**
  * Define las operaciones comunes de los elementos de servicio.
- * Los elementos pueden ser paquetes o instancias indiciduales, que pueden usar builder o composite
+ * Los elementos pueden ser paquetes o instancias indiciduales, que pueden usar builder, composite o decorator
  */
 public interface ElementoServicio {
 

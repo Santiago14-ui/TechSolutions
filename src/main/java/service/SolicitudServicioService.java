@@ -2,7 +2,6 @@ package service;
 
 import model.SolicitudServicio;
 import composite.ElementoServicio;
-import model.Solicitud;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,15 +14,13 @@ import java.util.Set;
  */
 public class SolicitudServicioService {
 
-    private final List<Solicitud> solicitudes;
-    private final Set<String> codigosRegistrados;
+    private final List<SolicitudServicio> solicitudesServicio;
 
     /**
      * Inicializa las colecciones de solicitudes.
      */
     public SolicitudServicioService() {
-        solicitudes = new ArrayList<>();
-        codigosRegistrados = new HashSet<>();
+        solicitudesServicio = new ArrayList<>();
     }
 
     /**
@@ -31,23 +28,21 @@ public class SolicitudServicioService {
      *
      * @param solicitud solicitud que se desea registrar
      */
-    public void registrarSolicitud(Solicitud solicitud) {
+    public void registrarSolicitud(SolicitudServicio solicitud) {
         if (solicitud == null) {
             throw new IllegalArgumentException(
                     "La solicitud es obligatoria."
             );
         }
 
-        String codigo = solicitud.getCodigo().trim().toUpperCase();
+        String codigo = solicitud.getCodigoUnico();
 
-        if (codigosRegistrados.contains(codigo)) {
-            throw new IllegalArgumentException(
-                    "Ya existe una solicitud con ese código."
-            );
+        for (SolicitudServicio servicio : solicitudesServicio) {
+            if (servicio.getCodigoUnico().equals(codigo)) {
+                throw new IllegalArgumentException("Ya existe una solicitud con ese código.");
+            }
         }
-
-        solicitudes.add(solicitud);
-        codigosRegistrados.add(codigo);
+        solicitudesServicio.add(solicitud);
     }
 
     /**
@@ -55,8 +50,8 @@ public class SolicitudServicioService {
      *
      * @return lista de solicitudes
      */
-    public List<Solicitud> obtenerSolicitudes() {
-        return Collections.unmodifiableList(solicitudes);
+    public List<SolicitudServicio> obtenerSolicitudes() {
+        return Collections.unmodifiableList(solicitudesServicio);
     }
 
     /**
@@ -65,15 +60,15 @@ public class SolicitudServicioService {
      * @param codigo código de la solicitud
      * @return solicitud encontrada o null si no existe
      */
-    public Solicitud buscarPorCodigo(String codigo) {
+    public SolicitudServicio buscarPorCodigo(String codigo) {
         if (codigo == null || codigo.isBlank()) {
             return null;
         }
 
         String codigoBuscado = codigo.trim();
 
-        for (Solicitud solicitud : solicitudes) {
-            if (solicitud.getCodigo().equalsIgnoreCase(codigoBuscado)) {
+        for (SolicitudServicio solicitud : solicitudesServicio) {
+            if (solicitud.getCodigoUnico().equalsIgnoreCase(codigoBuscado)) {
                 return solicitud;
             }
         }

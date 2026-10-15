@@ -5,7 +5,6 @@ import external.LegacySupport;
 import model.Cliente;
 import model.PrioridadSolicitud;
 import model.ServicioTecnologico;
-import model.Solicitud;
 import adapter.TecnicoInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

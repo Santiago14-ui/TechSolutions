@@ -23,4 +23,19 @@ public class AtencionPrioritaria extends Complemento {
     public AtencionPrioritaria(ServicioTecnologico servicio) {
         super(servicio);
     }
+
+    @Override
+    public String getNombre() {
+        return "";
+    }
+
+    @Override
+    public String getDescripcion() {
+        return "";
+    }
+
+    @Override
+    public void mostrarElemento(String identacion) {
+
+    }
 }

@@ -28,13 +28,13 @@ public class LegacySupportAdapter {
      * Consulta un técnico y transforma la respuesta externa
      * en un objeto TecnicoInfo.
      *
-     * @param codigoEspecialidad código de especialidad
+     * @param especialidad código de especialidad
      * @return información del técnico consultado
      */
-    public TecnicoInfo consultarTecnico(int codigoEspecialidad) {
+    public TecnicoInfo consultarTecnico(String especialidad) {
 
         String respuesta =
-                legacySupport.consultarTecnico(codigoEspecialidad);
+                legacySupport.consultarTecnico(especialidad);
 
         if (respuesta == null || respuesta.isBlank()) {
             throw new IllegalStateException(

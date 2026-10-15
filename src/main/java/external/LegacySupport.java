@@ -32,12 +32,12 @@ public class LegacySupport {
      * @param codigoEspecialidad numero correspondiente a la especialidad necesitada. 1=redes, 2=mantenimiento, 3=Informacion.
      * @return informacion entregada por la parte externa, la cual no es compatible con el funcionamiento del sistema actual
      */
-    public String consultarTecnico(int codigoEspecialidad) {
+    public String consultarTecnico(String codigoEspecialidad) {
 
         return switch (codigoEspecialidad) {
-            case 1 -> "TEC-105|DISPONIBLE|30000";
-            case 2 -> "TEC-208|DISPONIBLE|40000";
-            case 3 -> "TEC-310|NO_DISPONIBLE|0";
+            case "Mantenimiento" -> "TEC-105|DISPONIBLE|30000";
+            case "Instalación de redes" -> "TEC-208|DISPONIBLE|40000";
+            case "Recuperación de información" -> "TEC-310|NO_DISPONIBLE|0";
             default -> "SIN_TECNICO|NO_DISPONIBLE|0";
         };
     }
