@@ -35,7 +35,7 @@ class ControladorSolicitudesTest {
                 new PaqueteService(),
                 new SolicitudService(),
                 new TecnicoService(
-                        new LegacySupportAdapter(new LegacySupport())
+                        new LegacySupportAdapter(LegacySupport.getInstance())
                 )
         );
     }
@@ -50,7 +50,7 @@ class ControladorSolicitudesTest {
                         new PaqueteService(),
                         new SolicitudService(),
                         new TecnicoService(
-                                new LegacySupportAdapter(new LegacySupport())
+                                new LegacySupportAdapter(LegacySupport.getInstance())
                         )
                 )
         );

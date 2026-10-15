@@ -30,9 +30,8 @@ public class ControladorPrincipal {
         solicitudService = new SolicitudService();
         paqueteService = new PaqueteService();
 
-        LegacySupport legacySupport = new LegacySupport();
-        LegacySupportAdapter adapter =
-                new LegacySupportAdapter(legacySupport);
+        LegacySupport legacySupport = LegacySupport.getInstance();
+        LegacySupportAdapter adapter = new LegacySupportAdapter(legacySupport);
 
         tecnicoService = new TecnicoService(adapter);
     }
