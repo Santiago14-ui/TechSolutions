@@ -1,0 +1,8 @@
+package model;
+
+public enum TipoServicioTecnologico {
+    MANTENIMIENTO_PREVENTIVO,
+    MANTENIMIENTO_CORRECTIVO,
+    INSTALACION_REDES,
+    RECUPERACION_INFORMACION
+}

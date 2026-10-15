@@ -1,11 +1,6 @@
 
 package service;
 
-import factory.InstalacionRedesFactory;
-import factory.MantenimientoCorrectivoFactory;
-import factory.MantenimientoPreventivoFactory;
-import factory.RecuperacionInformacionFactory;
-import factory.ServicioFactory;
 import model.ServicioTecnologico;
 
 import java.util.ArrayList;

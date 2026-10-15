@@ -6,9 +6,9 @@ import decorator.ComplementoServicioTecnologico;
 
 /**
  * Representa un servicio técnico de TechSolutions.
- * Utiliza composite y decorator
+ * Utiliza composite, decorator y factory method
  */
-public class ServicioTecnologico implements ElementoServicio, ComplementoServicioTecnologico {
+public abstract class ServicioTecnologico implements ElementoServicio, ComplementoServicioTecnologico {
 
     /**
      * Atributos
@@ -18,28 +18,15 @@ public class ServicioTecnologico implements ElementoServicio, ComplementoServici
     private String nombre;
     private String descripcion;
     private double costoBase;
+    private TipoServicioTecnologico tipoServicioTecnologico;
 
-    public ServicioTecnologico(String codigo, String nombre, String descripcion, double costoBase) {
-        if (codigo == null || codigo.isBlank()) {
-            throw new IllegalArgumentException("El código es obligatorio.");
-        }
-
-        if (nombre == null || nombre.isBlank()) {
-            throw new IllegalArgumentException("El nombre es obligatorio.");
-        }
-
-        if (descripcion == null || descripcion.isBlank()) {
-            throw new IllegalArgumentException("La descripción es obligatoria.");
-        }
-
-        if (costoBase < 0) {
-            throw new IllegalArgumentException("El costo no puede ser negativo.");
-        }
+    public ServicioTecnologico(String codigo, String nombre, String descripcion, double costoBase,  TipoServicioTecnologico tipoServicioTecnologico) {
 
         this.codigo = codigo;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.costoBase = costoBase;
+        this.tipoServicioTecnologico = tipoServicioTecnologico;
     }
 
     public String getCodigo() {
@@ -71,6 +58,7 @@ public class ServicioTecnologico implements ElementoServicio, ComplementoServici
                 "codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
+                ", tipo=" + tipoServicioTecnologico + '\'' +
                 ", costoBase=" + costoBase +
                 '}';
     }
