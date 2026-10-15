@@ -59,4 +59,19 @@ public class ServicioPersonalizado implements ElementoServicio {
     public double calcularCosto() {
         return costoBase;
     }
+
+    @Override
+    public String toString() {
+        return "ServicioPersonalizado{" +
+                "codigo='" + codigo + '\'' +
+                ", nombre='" + nombre + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                ", costoBase=" + costoBase +
+                '}';
+    }
+
+    @Override
+    public void mostrarElemento(String identacion) {
+        System.out.println(this);
+    }
 }

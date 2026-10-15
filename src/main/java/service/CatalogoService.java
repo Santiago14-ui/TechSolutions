@@ -1,6 +1,7 @@
 
 package service;
 
+import factory.*;
 import model.ServicioTecnologico;
 
 import java.util.ArrayList;
@@ -21,14 +22,14 @@ public class CatalogoService {
     }
 
     private void cargarServiciosIniciales() {
-        agregarServicio(new MantenimientoPreventivoFactory());
-        agregarServicio(new MantenimientoCorrectivoFactory());
-        agregarServicio(new InstalacionRedesFactory());
-        agregarServicio(new RecuperacionInformacionFactory());
+        agregarServicio(new MantenimientoPreventivoServicioTecnologicoFactory());
+        agregarServicio(new MantenimientoCorrectivoServicioTecnologicoFactory());
+        agregarServicio(new InstalacionRedesServicioTecnologicoFactory());
+        agregarServicio(new RecuperacionInformacionServicioTecnologicoFactory());
     }
 
-    private void agregarServicio(ServicioFactory factory) {
-        servicioTecnologicos.add(factory.crearServicio());
+    private void agregarServicio(ServicioTecnologicoFactory factory) {
+        servicioTecnologicos.add(factory.crearServicioTecnologico("0001", "servicio tecnologico"));
     }
 
     public List<ServicioTecnologico> obtenerServicios() {
