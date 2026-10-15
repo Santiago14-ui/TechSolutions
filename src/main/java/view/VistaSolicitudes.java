@@ -10,6 +10,7 @@ import model.PrioridadSolicitud;
 import model.PaqueteServicios;
 import model.Servicio;
 import model.Solicitud;
+import model.TecnicoInfo;
 
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -33,7 +34,8 @@ import java.util.List;
 
 /**
  * Ventana para registrar y consultar solicitudes de servicio.
- * Permite seleccionar servicios, paquetes y complementos.
+ * Permite seleccionar servicios, paquetes, complementos
+ * y atención presencial con consulta de técnicos.
  */
 public class VistaSolicitudes {
 
@@ -73,8 +75,12 @@ public class VistaSolicitudes {
         );
         subtitulo.setWrapText(true);
 
+        // Código de solicitud.
+
         TextField campoCodigo = new TextField();
         campoCodigo.setPromptText("Código (ej. SOL-001)");
+
+        // Clientes.
 
         ComboBox<Cliente> selectorCliente = new ComboBox<>();
         selectorCliente.getItems().addAll(
@@ -83,23 +89,27 @@ public class VistaSolicitudes {
         selectorCliente.setPromptText("Selecciona un cliente");
         selectorCliente.setMaxWidth(Double.MAX_VALUE);
 
-        selectorCliente.setConverter(new javafx.util.StringConverter<>() {
-            @Override
-            public String toString(Cliente cliente) {
-                if (cliente == null) {
-                    return "";
+        selectorCliente.setConverter(
+                new javafx.util.StringConverter<>() {
+                    @Override
+                    public String toString(Cliente cliente) {
+                        if (cliente == null) {
+                            return "";
+                        }
+
+                        return cliente.getNombre()
+                                + " - "
+                                + cliente.getDocumento();
+                    }
+
+                    @Override
+                    public Cliente fromString(String texto) {
+                        return null;
+                    }
                 }
+        );
 
-                return cliente.getNombre()
-                        + " - "
-                        + cliente.getDocumento();
-            }
-
-            @Override
-            public Cliente fromString(String texto) {
-                return null;
-            }
-        });
+        // Fecha y prioridad.
 
         DatePicker selectorFecha = new DatePicker();
         selectorFecha.setPromptText("Fecha programada");
@@ -113,6 +123,8 @@ public class VistaSolicitudes {
         );
         selectorPrioridad.setValue(PrioridadSolicitud.MEDIA);
         selectorPrioridad.setMaxWidth(Double.MAX_VALUE);
+
+        // Observaciones.
 
         TextArea campoObservaciones = new TextArea();
         campoObservaciones.setPromptText(
@@ -199,6 +211,53 @@ public class VistaSolicitudes {
                 "Atención a domicilio | $25.000 por elemento"
         );
 
+        // Atención presencial mediante Adapter.
+
+        Label etiquetaAtencion =
+                new Label("4. Modalidad de atención");
+
+        etiquetaAtencion.setStyle("-fx-font-weight: bold;");
+
+        CheckBox casillaPresencial = new CheckBox(
+                "Solicitar atención presencial"
+        );
+
+        ComboBox<Integer> selectorEspecialidad = new ComboBox<>();
+        selectorEspecialidad.getItems().addAll(1, 2, 3);
+        selectorEspecialidad.setPromptText(
+                "Selecciona la especialidad del técnico"
+        );
+        selectorEspecialidad.setMaxWidth(Double.MAX_VALUE);
+        selectorEspecialidad.setDisable(true);
+
+        selectorEspecialidad.setConverter(
+                new javafx.util.StringConverter<>() {
+                    @Override
+                    public String toString(Integer codigo) {
+                        if (codigo == null) {
+                            return "";
+                        }
+
+                        return switch (codigo) {
+                            case 1 -> "Especialidad 1";
+                            case 2 -> "Especialidad 2";
+                            case 3 -> "Especialidad 3";
+                            default -> "Especialidad " + codigo;
+                        };
+                    }
+
+                    @Override
+                    public Integer fromString(String texto) {
+                        return null;
+                    }
+                }
+        );
+
+        Label informacionTecnico = new Label(
+                "Atención no presencial. Sin costo de desplazamiento."
+        );
+        informacionTecnico.setWrapText(true);
+
         // Costo estimado.
 
         Label etiquetaCosto = new Label("Costo estimado: $0");
@@ -208,9 +267,18 @@ public class VistaSolicitudes {
                         + "-fx-text-fill: #176B3A;"
         );
 
+        // Resultado del registro.
+
+        Label resultado = new Label();
+        resultado.setWrapText(true);
+        resultado.setStyle(
+                "-fx-font-weight: bold; "
+                        + "-fx-text-fill: #176B3A;"
+        );
+
         /*
-         * Actualiza la selección del controlador y calcula
-         * el costo con los complementos elegidos.
+         * Actualiza la selección y calcula el costo.
+         * La consulta del técnico solo se realiza para atención presencial.
          */
         Runnable actualizarCosto = () -> {
             cargarElementosSeleccionados(
@@ -224,11 +292,81 @@ public class VistaSolicitudes {
                     casillaDomicilio.isSelected()
             );
 
+            if (casillaPresencial.isSelected()) {
+                Integer especialidad = selectorEspecialidad.getValue();
+
+                if (especialidad == null) {
+                    informacionTecnico.setText(
+                            "Selecciona una especialidad para consultar "
+                                    + "la disponibilidad."
+                    );
+
+                    etiquetaCosto.setText(
+                            "Costo estimado: pendiente de consultar técnico"
+                    );
+                    return;
+                }
+
+                try {
+                    TecnicoInfo tecnico =
+                            controlador.consultarTecnico(especialidad);
+
+                    if (tecnico == null) {
+                        informacionTecnico.setText(
+                                "No se obtuvo información del técnico."
+                        );
+                        etiquetaCosto.setText(
+                                "Costo estimado: no disponible"
+                        );
+                        return;
+                    }
+
+                    if (!tecnico.isDisponible()) {
+                        informacionTecnico.setText(
+                                "El técnico " + tecnico.getId()
+                                        + " no está disponible."
+                        );
+                        etiquetaCosto.setText(
+                                "Costo estimado: no disponible"
+                        );
+                        return;
+                    }
+
+                    total += tecnico.getCostoDesplazamiento();
+
+                    informacionTecnico.setText(
+                            "Técnico: " + tecnico.getId()
+                                    + " | Disponible"
+                                    + " | Desplazamiento: $"
+                                    + String.format(
+                                    "%,.0f",
+                                    tecnico.getCostoDesplazamiento()
+                            )
+                    );
+
+                } catch (IllegalArgumentException
+                         | IllegalStateException e) {
+
+                    informacionTecnico.setText(e.getMessage());
+                    etiquetaCosto.setText(
+                            "Costo estimado: no disponible"
+                    );
+                    return;
+                }
+            } else {
+                informacionTecnico.setText(
+                        "Atención no presencial. "
+                                + "Sin costo de desplazamiento."
+                );
+            }
+
             etiquetaCosto.setText(
                     "Costo estimado: $"
                             + String.format("%,.0f", total)
             );
         };
+
+        // Eventos de servicios, paquetes y complementos.
 
         for (CheckBox casilla : casillasServicios) {
             casilla.setOnAction(
@@ -254,22 +392,20 @@ public class VistaSolicitudes {
                 event -> actualizarCosto.run()
         );
 
-        // Botón para registrar la solicitud.
+        casillaPresencial.setOnAction(event -> {
+            selectorEspecialidad.setDisable(
+                    !casillaPresencial.isSelected()
+            );
 
-        Button botonRegistrar = new Button("Registrar solicitud");
-        botonRegistrar.setMaxWidth(Double.MAX_VALUE);
-        botonRegistrar.setStyle(
-                "-fx-background-color: #1976D2; "
-                        + "-fx-text-fill: white; "
-                        + "-fx-font-weight: bold; "
-                        + "-fx-padding: 9 15 9 15;"
-        );
+            if (!casillaPresencial.isSelected()) {
+                selectorEspecialidad.setValue(null);
+            }
 
-        Label resultado = new Label();
-        resultado.setWrapText(true);
-        resultado.setStyle(
-                "-fx-font-weight: bold; "
-                        + "-fx-text-fill: #176B3A;"
+            actualizarCosto.run();
+        });
+
+        selectorEspecialidad.setOnAction(
+                event -> actualizarCosto.run()
         );
 
         // Lista de solicitudes registradas.
@@ -335,7 +471,7 @@ public class VistaSolicitudes {
                 elementos.setWrapText(true);
 
                 Label costo = new Label(
-                        "Costo total: $"
+                        "Costo de servicios y complementos: $"
                                 + String.format(
                                 "%,.0f",
                                 solicitud.calcularCostoTotal()
@@ -373,11 +509,17 @@ public class VistaSolicitudes {
                 event -> actualizarLista.run()
         );
 
-        /*
-         * Valida y registra la solicitud.
-         * Los decoradores se aplican antes de construirla,
-         * por lo que su costo queda incluido en el objeto registrado.
-         */
+        // Registro de solicitud.
+
+        Button botonRegistrar = new Button("Registrar solicitud");
+        botonRegistrar.setMaxWidth(Double.MAX_VALUE);
+        botonRegistrar.setStyle(
+                "-fx-background-color: #1976D2; "
+                        + "-fx-text-fill: white; "
+                        + "-fx-font-weight: bold; "
+                        + "-fx-padding: 9 15 9 15;"
+        );
+
         botonRegistrar.setOnAction(event -> {
             try {
                 String codigo = campoCodigo.getText().trim();
@@ -401,8 +543,14 @@ public class VistaSolicitudes {
                 if (fecha != null
                         && fecha.isBefore(LocalDate.now())) {
                     mostrarError(
-                            "La fecha programada no puede ser anterior a hoy."
+                            "La fecha programada no puede "
+                                    + "ser anterior a hoy."
                     );
+                    return;
+                }
+
+                if (prioridad == null) {
+                    mostrarError("Selecciona una prioridad.");
                     return;
                 }
 
@@ -411,23 +559,51 @@ public class VistaSolicitudes {
                         casillasPaquetes
                 );
 
-                if (controlador.obtenerElementosSeleccionados().isEmpty()) {
+                List<ElementoServicio> seleccionados =
+                        controlador.obtenerElementosSeleccionados();
+
+                if (seleccionados.isEmpty()) {
                     mostrarError(
                             "Selecciona al menos un servicio o paquete."
                     );
                     return;
                 }
 
-                /*
-                 * Se decoran los elementos seleccionados.
-                 * Cada complemento se aplica una sola vez a cada elemento.
-                 */
+                // Validar el técnico antes de registrar.
+
+                TecnicoInfo tecnicoSeleccionado = null;
+
+                if (casillaPresencial.isSelected()) {
+                    Integer especialidad =
+                            selectorEspecialidad.getValue();
+
+                    if (especialidad == null) {
+                        mostrarError(
+                                "Selecciona la especialidad del técnico."
+                        );
+                        return;
+                    }
+
+                    tecnicoSeleccionado =
+                            controlador.consultarTecnico(especialidad);
+
+                    if (tecnicoSeleccionado == null
+                            || !tecnicoSeleccionado.isDisponible()) {
+                        mostrarError(
+                                "El técnico seleccionado no está disponible. "
+                                        + "Elige otra especialidad o desactiva "
+                                        + "la atención presencial."
+                        );
+                        return;
+                    }
+                }
+
+                // Aplicar cada complemento una sola vez.
+
                 List<ElementoServicio> elementosDecorados =
                         new ArrayList<>();
 
-                for (ElementoServicio elemento :
-                        controlador.obtenerElementosSeleccionados()) {
-
+                for (ElementoServicio elemento : seleccionados) {
                     ElementoServicio decorado = elemento;
 
                     if (casillaPrioritaria.isSelected()) {
@@ -456,20 +632,22 @@ public class VistaSolicitudes {
                         cliente.getDocumento(),
                         fecha,
                         campoObservaciones.getText().trim(),
-                        prioridad
+                        prioridad,
+                        casillaPresencial.isSelected(),
+                        tecnicoSeleccionado
                 );
+
+                // El costo de desplazamiento ya queda incluido en la solicitud.
+                double costoFinal = solicitud.calcularCostoTotal();
 
                 resultado.setText(
                         "Solicitud registrada correctamente.\n"
                                 + "Código: " + solicitud.getCodigo()
                                 + "\nCosto total: $"
-                                + String.format(
-                                "%,.0f",
-                                solicitud.calcularCostoTotal()
-                        )
+                                + String.format("%,.0f", costoFinal)
                 );
 
-                // Limpiar el formulario después del registro.
+                // Limpiar el formulario.
 
                 campoCodigo.clear();
                 selectorCliente.setValue(null);
@@ -488,6 +666,15 @@ public class VistaSolicitudes {
                 casillaPrioritaria.setSelected(false);
                 casillaSoporte.setSelected(false);
                 casillaDomicilio.setSelected(false);
+                casillaPresencial.setSelected(false);
+
+                selectorEspecialidad.setValue(null);
+                selectorEspecialidad.setDisable(true);
+
+                informacionTecnico.setText(
+                        "Atención no presencial. "
+                                + "Sin costo de desplazamiento."
+                );
 
                 etiquetaCosto.setText("Costo estimado: $0");
 
@@ -525,6 +712,11 @@ public class VistaSolicitudes {
                 casillaPrioritaria,
                 casillaSoporte,
                 casillaDomicilio,
+                new Separator(),
+                etiquetaAtencion,
+                casillaPresencial,
+                selectorEspecialidad,
+                informacionTecnico,
                 etiquetaCosto,
                 botonRegistrar,
                 resultado,
@@ -583,6 +775,9 @@ public class VistaSolicitudes {
 
     /**
      * Carga en el controlador los servicios y paquetes seleccionados.
+     *
+     * @param casillasServicios casillas de servicios
+     * @param casillasPaquetes casillas de paquetes
      */
     private void cargarElementosSeleccionados(
             List<CheckBox> casillasServicios,
@@ -608,7 +803,7 @@ public class VistaSolicitudes {
     }
 
     /**
-     * Construye una descripción con los nombres de los elementos.
+     * Obtiene los nombres de los elementos de una solicitud.
      *
      * @param solicitud solicitud consultada
      * @return nombres de los servicios y paquetes
