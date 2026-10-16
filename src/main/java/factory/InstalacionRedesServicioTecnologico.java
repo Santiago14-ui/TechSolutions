@@ -1,16 +1,22 @@
+
 package factory;
 
-import model.TipoServicioTecnologico;
 import model.ServicioTecnologico;
 
 /**
- * Clase para conectar la instancia con su debido tipo de servicio tecnologico
- * Usa factory method
+ * Representa un servicio de instalación de redes.
+ * Usa Factory Method.
  */
-public class InstalacionRedesServicioTecnologico extends ServicioTecnologico implements IServicioTecnologico {
+public class InstalacionRedesServicioTecnologico
+        extends ServicioTecnologico implements IServicioTecnologico {
 
-    public InstalacionRedesServicioTecnologico(String codigo, String nombre, String descripcion, double costoBase, TipoServicioTecnologico tipoServicioTecnologico) {
+    public InstalacionRedesServicioTecnologico(
+            String codigo,
+            String nombre,
+            String descripcion,
+            double costoBase,
+            String tipoServicioTecnologico) {
+
         super(codigo, nombre, descripcion, costoBase, tipoServicioTecnologico);
     }
-
 }

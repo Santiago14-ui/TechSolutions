@@ -1,26 +1,26 @@
 
 package model;
 
-import composite.ElementoServicio;
 import decorator.ComplementoServicioTecnologico;
 
 /**
  * Representa un servicio técnico de TechSolutions.
- * Utiliza composite, decorator y factory method
+ * Utiliza Composite, Decorator y Factory Method.
  */
 public abstract class ServicioTecnologico implements ComplementoServicioTecnologico {
 
-    /**
-     * Atributos
-     */
-    //Datos obligatorios
     private String codigo;
     private String nombre;
     private String descripcion;
     private double costoBase;
-    private TipoServicioTecnologico tipoServicioTecnologico;
+    private String tipoServicioTecnologico;
 
-    public ServicioTecnologico(String codigo, String nombre, String descripcion, double costoBase,  TipoServicioTecnologico tipoServicioTecnologico) {
+    public ServicioTecnologico(
+            String codigo,
+            String nombre,
+            String descripcion,
+            double costoBase,
+            String tipoServicioTecnologico) {
 
         this.codigo = codigo;
         this.nombre = nombre;
@@ -47,6 +47,10 @@ public abstract class ServicioTecnologico implements ComplementoServicioTecnolog
         return costoBase;
     }
 
+    public String getTipoServicioTecnologico() {
+        return tipoServicioTecnologico;
+    }
+
     @Override
     public void mostrarElemento(String identacion) {
         System.out.println(identacion + this);
@@ -58,7 +62,7 @@ public abstract class ServicioTecnologico implements ComplementoServicioTecnolog
                 "codigo='" + codigo + '\'' +
                 ", nombre='" + nombre + '\'' +
                 ", descripcion='" + descripcion + '\'' +
-                ", tipo=" + tipoServicioTecnologico + '\'' +
+                ", tipoServicioTecnologico='" + tipoServicioTecnologico + '\'' +
                 ", costoBase=" + costoBase +
                 '}';
     }

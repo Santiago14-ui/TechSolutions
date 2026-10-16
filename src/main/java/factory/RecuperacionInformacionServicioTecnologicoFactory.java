@@ -1,23 +1,27 @@
+
 package factory;
 
 import model.ServicioTecnologico;
-import model.TipoServicioTecnologico;
 
 /**
- * Clase para crear un servicio tecnologico de tipo recuperar informacion
- * Usa factory method
+ * Crea servicios de recuperación de información.
+ * Usa Factory Method.
  */
-public class RecuperacionInformacionServicioTecnologicoFactory implements ServicioTecnologicoFactory {
+public class RecuperacionInformacionServicioTecnologicoFactory
+        implements ServicioTecnologicoFactory {
+
     private final double COSTO_BASE = 150000;
     private final String NOMBRE = "Recuperación de información";
 
     @Override
-    public ServicioTecnologico crearServicioTecnologico(String codigo, String descripcion) {
+    public ServicioTecnologico crearServicioTecnologico(
+            String codigo, String descripcion) {
+
         return new RecuperacionInformacionServicioTecnologico(
                 codigo,
                 NOMBRE,
                 descripcion,
                 COSTO_BASE,
-                TipoServicioTecnologico.RECUPERACION_INFORMACION);
+                NOMBRE);
     }
 }
