@@ -85,8 +85,9 @@ public class CatalogoService {
 
             case "Recuperación de información" -> new RecuperacionInformacionServicioTecnologicoFactory().crearServicioTecnologico(codigoLimpio, descripcionLimpia);
 
+            //Aquí seguiría la cadena de los factory, por el momento se deja asi para demostrarlo en la interfaz grafica
             default -> throw new IllegalArgumentException(
-                    "El tipo de servicio seleccionado no es válido."
+                    "Mostrar Factory method"
             );
         };
 

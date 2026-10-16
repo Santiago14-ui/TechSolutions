@@ -507,7 +507,7 @@ public class MainViewController {
                             " con código " + servicio.getCodigo() +
                             ".\nCosto base: " + moneda(servicio.getCostoBase()));
         } catch (RuntimeException e) {
-            mostrarError("No se pudo crear el servicio", e.getMessage());
+            mostrarError("Caso factory method", e.getMessage());
         }
     }
 
