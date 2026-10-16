@@ -63,4 +63,22 @@ public class ClienteService {
 
         return null;
     }
+
+
+    public void registrarCliente(Cliente cliente) {
+        if (cliente == null) {
+            throw new IllegalArgumentException(
+                    "El cliente es obligatorio."
+            );
+        }
+
+        if (buscarPorDocumento(cliente.getDocumento()) != null) {
+            throw new IllegalArgumentException(
+                    "Ya existe un cliente con ese documento."
+            );
+        }
+
+        clientes.add(cliente);
+    }
+
 }

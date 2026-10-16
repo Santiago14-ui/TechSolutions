@@ -301,6 +301,9 @@
                             <Button text="Mostrar todos"
                                     onAction="#cargarClientes"
                                     styleClass="button-secondary"/>
+                            <Button text="+ Nuevo cliente"
+                                    onAction="#crearCliente"
+                                    styleClass="button-primary"/>
                         </HBox>
 
                         <VBox styleClass="table-panel" spacing="12"
@@ -388,6 +391,58 @@
                             </TableView>
                         </VBox>
                     </VBox>
+                </Tab>
+
+                <!-- CREAR SERVICIOS TECNOLÓGICOS -->
+                <Tab text="  Nuevo servicio  ">
+                    <ScrollPane fitToWidth="true" styleClass="content-scroll">
+                        <VBox spacing="22" styleClass="page-content">
+                            <VBox spacing="6">
+                                <Label text="CATÁLOGO TECNOLÓGICO"
+                                       styleClass="eyebrow"/>
+                                <Label text="Crear servicio tecnológico"
+                                       styleClass="page-title"/>
+                                <Label text="Registra nuevas opciones en el catálogo para poder incluirlas en paquetes y solicitudes."
+                                       styleClass="page-description"
+                                       wrapText="true"/>
+                            </VBox>
+
+                            <VBox spacing="16" styleClass="panel"
+                                  maxWidth="760">
+                                <Label text="Datos del servicio"
+                                       styleClass="section-title"/>
+
+                                <Label text="CÓDIGO"
+                                       styleClass="field-label"/>
+                                <TextField fx:id="nuevoServicioCodigoField"
+                                           promptText="Ej. ST-005"
+                                           styleClass="dark-field"/>
+
+                                <Label text="NOMBRE DEL SERVICIO TECNOLÓGICO"
+                                       styleClass="field-label"/>
+                                <TextField fx:id="nuevoServicioTipoField"
+                                           promptText="Ej. Instalación de cámaras IP"
+                                           styleClass="dark-field"/>
+
+                                <Label text="DESCRIPCIÓN"
+                                       styleClass="field-label"/>
+                                <TextArea fx:id="nuevoServicioDescripcionArea"
+                                          promptText="Describe el servicio tecnológico..."
+                                          prefRowCount="4"
+                                          wrapText="true"
+                                          styleClass="dark-area"/>
+
+                                <Label text="Escribe el nombre del nuevo servicio y describe qué incluye."
+                                       styleClass="hint-text"
+                                       wrapText="true"/>
+
+                                <Button text="＋  Crear servicio tecnológico"
+                                        onAction="#crearServicioTecnologico"
+                                        styleClass="button-primary"
+                                        maxWidth="Infinity"/>
+                            </VBox>
+                        </VBox>
+                    </ScrollPane>
                 </Tab>
 
                 <!-- TÉCNICOS -->
@@ -479,7 +534,8 @@
 
                 <!-- PAQUETES -->
                 <Tab text="  Paquetes  ">
-                    <VBox spacing="18" styleClass="page-content">
+                    <ScrollPane fitToWidth="true" styleClass="content-scroll">
+                        <VBox spacing="18" styleClass="page-content">
                         <VBox spacing="6">
                             <Label text="SERVICIOS PERSONALIZADOS"
                                    styleClass="eyebrow"/>
@@ -515,12 +571,15 @@
                                           wrapText="true"
                                           styleClass="dark-area"/>
 
-                                <Label text="SERVICIO INICIAL"
+                                <Label text="ELEMENTOS DEL PAQUETE"
                                        styleClass="field-label"/>
-                                <ComboBox fx:id="paqueteServicioCombo"
-                                          promptText="Selecciona un servicio"
-                                          maxWidth="Infinity"
-                                          styleClass="dark-combo"/>
+                                <ListView fx:id="paqueteElementosListView"
+                                          prefHeight="180"
+                                          minHeight="120"
+                                          styleClass="dark-list"/>
+                                <Label text="Marca las casillas para incluir varios servicios o paquetes."
+                                       styleClass="hint-text"
+                                       wrapText="true"/>
 
                                 <Button text="＋  Crear paquete"
                                         onAction="#crearPaquete"
@@ -562,14 +621,93 @@
                                                      prefWidth="130"/>
                                     </columns>
                                 </TableView>
+                                <HBox alignment="CENTER_RIGHT">
+                                    <Button text="Ver composición del paquete"
+                                            onAction="#verComposicionPaquete"
+                                            styleClass="button-secondary"/>
+                                </HBox>
                             </VBox>
                         </HBox>
-                    </VBox>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- SERVICIOS CONTRATADOS -->
+                <Tab text="  Servicios  ">
+                    <ScrollPane fitToWidth="true" styleClass="content-scroll">
+                        <VBox spacing="20" styleClass="page-content">
+                            <VBox spacing="6">
+                                <Label text="GESTIÓN DE ATENCIÓN"
+                                       styleClass="eyebrow"/>
+                                <Label text="Servicios para clientes"
+                                       styleClass="page-title"/>
+                                <Label text="Combina servicios del catálogo o paquetes, consulta un técnico y calcula el costo final de la atención."
+                                       styleClass="page-description"
+                                       wrapText="true"/>
+                            </VBox>
+
+                            <HBox spacing="18" alignment="TOP_LEFT">
+                                <VBox spacing="14" styleClass="panel"
+                                      prefWidth="370">
+                                    <Label text="Configurar servicio"
+                                           styleClass="section-title"/>
+
+                                    <Label text="CLIENTE"
+                                           styleClass="field-label"/>
+                                    <ComboBox fx:id="servicioClienteCombo"
+                                              promptText="Selecciona un cliente"
+                                              maxWidth="Infinity"
+                                              styleClass="dark-combo"/>
+
+                                    <Label text="SERVICIOS Y PAQUETES"
+                                           styleClass="field-label"/>
+                                    <ListView fx:id="servicioElementosListView"
+                                              prefHeight="220"
+                                              minHeight="140"
+                                              styleClass="dark-list"/>
+                                    <Label text="Marca las casillas para incluir varios elementos."
+                                           styleClass="hint-text"
+                                           wrapText="true"/>
+
+                                    <Label text="ESPECIALIDAD DEL TÉCNICO"
+                                           styleClass="field-label"/>
+                                    <ComboBox fx:id="servicioTecnicoCombo"
+                                              promptText="Selecciona una especialidad"
+                                              maxWidth="Infinity"
+                                              styleClass="dark-combo"/>
+
+                                    <Button text="＋  Registrar servicio"
+                                            onAction="#crearServicioContratado"
+                                            styleClass="button-primary"
+                                            maxWidth="Infinity"/>
+                                </VBox>
+
+                                <VBox spacing="12" styleClass="table-panel"
+                                      HBox.hgrow="ALWAYS">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="Servicios registrados en esta sesión"
+                                               styleClass="section-title"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="COSTO FINAL"
+                                               styleClass="count-chip"/>
+                                    </HBox>
+                                    <ListView fx:id="serviciosContratadosListView"
+                                              prefHeight="420"
+                                              styleClass="dark-list"
+                                              VBox.vgrow="ALWAYS"/>
+                                    <Label text="Los servicios registrados aquí se conservan en memoria mientras la aplicación está abierta."
+                                           styleClass="hint-text"
+                                           wrapText="true"/>
+                                </VBox>
+                            </HBox>
+                        </VBox>
+                    </ScrollPane>
                 </Tab>
 
                 <!-- SOLICITUDES -->
                 <Tab text="  Solicitudes  ">
-                    <VBox spacing="18" styleClass="page-content">
+                    <ScrollPane fitToWidth="true" styleClass="content-scroll">
+                        <VBox spacing="18" styleClass="page-content">
                         <VBox spacing="6">
                             <Label text="ATENCIÓN AL CLIENTE"
                                    styleClass="eyebrow"/>
@@ -672,7 +810,8 @@
                                 </TableView>
                             </VBox>
                         </HBox>
-                    </VBox>
+                        </VBox>
+                    </ScrollPane>
                 </Tab>
             </tabs>
         </TabPane>

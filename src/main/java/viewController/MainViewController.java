@@ -14,12 +14,16 @@ import external.LegacySupport;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.StringConverter;
+import javafx.scene.control.SelectionMode;
+import javafx.scene.layout.VBox;
 import model.Cliente;
 import model.PrioridadSolicitud;
 import model.ServicioTecnologico;
+import model.Servicio;
 import model.SolicitudServicio;
 import service.CatalogoService;
 import service.ClienteService;
@@ -40,6 +44,7 @@ public class MainViewController {
     private final CatalogoService catalogoService;
     private final PaqueteService paqueteService;
     private final SolicitudServicioService solicitudService;
+    private final List<Servicio> serviciosContratados = new ArrayList<>();
 
     // Controladores de la aplicación
     private final ClientesController clientesController;
@@ -77,17 +82,28 @@ public class MainViewController {
     @FXML private TableColumn<ServicioTecnologico, Number> servicioCostoCol;
     @FXML private Label serviciosCountLabel;
 
+    // Crear servicios tecnológicos
+    @FXML private TextField nuevoServicioCodigoField;
+    @FXML private TextField nuevoServicioTipoField;
+    @FXML private TextArea nuevoServicioDescripcionArea;
+
     // Técnicos
     @FXML private ComboBox<String> especialidadCombo;
     @FXML private Label tecnicoIdLabel;
     @FXML private Label tecnicoEstadoLabel;
     @FXML private Label tecnicoCostoLabel;
 
+    // Servicios contratados
+    @FXML private ComboBox<Cliente> servicioClienteCombo;
+    @FXML private ListView<ElementoServicio> servicioElementosListView;
+    @FXML private ComboBox<String> servicioTecnicoCombo;
+    @FXML private ListView<String> serviciosContratadosListView;
+
     // Paquetes
     @FXML private TextField paqueteCodigoField;
     @FXML private TextField paqueteNombreField;
     @FXML private TextArea paqueteDescripcionField;
-    @FXML private ComboBox<ServicioTecnologico> paqueteServicioCombo;
+    @FXML private ListView<ElementoServicio> paqueteElementosListView;
     @FXML private TableView<PaqueteServicios> paquetesTable;
     @FXML private TableColumn<PaqueteServicios, String> paqueteTablaCodigoCol;
     @FXML private TableColumn<PaqueteServicios, String> paqueteTablaNombreCol;
@@ -232,35 +248,20 @@ public class MainViewController {
                 "Recuperación de información"
         ));
 
+        servicioTecnicoCombo.setItems(FXCollections.observableArrayList(
+                "Mantenimiento",
+                "Instalación de redes",
+                "Recuperación de información"
+        ));
+
         solicitudPrioridadCombo.setItems(
-                FXCollections.observableArrayList(
-                        PrioridadSolicitud.values()));
-
-        paqueteServicioCombo.setConverter(
-                new StringConverter<>() {
-                    @Override
-                    public String toString(ServicioTecnologico servicio) {
-                        if (servicio == null) {
-                            return "";
-                        }
-                        return servicio.getNombre()
-                                + " · " + servicio.getCodigo();
-                    }
-
-                    @Override
-                    public ServicioTecnologico fromString(String texto) {
-                        return null;
-                    }
-                });
+                FXCollections.observableArrayList(PrioridadSolicitud.values()));
 
         solicitudClienteCombo.setConverter(new StringConverter<>() {
             @Override
             public String toString(Cliente cliente) {
-                if (cliente == null) {
-                    return "";
-                }
-                return cliente.getNombre()
-                        + " · " + cliente.getDocumento();
+                return cliente == null ? "" :
+                        cliente.getNombre() + " · " + cliente.getDocumento();
             }
 
             @Override
@@ -269,21 +270,60 @@ public class MainViewController {
             }
         });
 
-        solicitudElementoCombo.setConverter(
-                new StringConverter<>() {
-                    @Override
-                    public String toString(ElementoServicio elemento) {
-                        if (elemento == null) {
-                            return "";
-                        }
-                        return elemento.getNombre();
-                    }
+        servicioClienteCombo.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(Cliente cliente) {
+                return cliente == null ? "" :
+                        cliente.getNombre() + " · " + cliente.getDocumento();
+            }
 
-                    @Override
-                    public ElementoServicio fromString(String texto) {
-                        return null;
-                    }
-                });
+            @Override
+            public Cliente fromString(String texto) {
+                return null;
+            }
+        });
+
+        solicitudElementoCombo.setConverter(new StringConverter<>() {
+            @Override
+            public String toString(ElementoServicio elemento) {
+                return elemento == null ? "" :
+                        elemento.getNombre() + " · " + moneda(elemento.calcularCosto());
+            }
+
+            @Override
+            public ElementoServicio fromString(String texto) {
+                return null;
+            }
+        });
+
+        paqueteElementosListView.getSelectionModel()
+                .setSelectionMode(SelectionMode.MULTIPLE);
+        servicioElementosListView.getSelectionModel()
+                .setSelectionMode(SelectionMode.MULTIPLE);
+
+        configurarListaSeleccionMultiple(paqueteElementosListView);
+        configurarListaSeleccionMultiple(servicioElementosListView);
+
+        // La lista de servicios registrados también usa filas oscuras y legibles.
+        serviciosContratadosListView.setStyle(
+                "-fx-background-color: #0e1628; " +
+                "-fx-control-inner-background: #0e1628; " +
+                "-fx-border-color: #2b3854; -fx-border-radius: 10; " +
+                "-fx-background-radius: 10;");
+        serviciosContratadosListView.setCellFactory(lista -> new ListCell<>() {
+            @Override
+            protected void updateItem(String detalle, boolean empty) {
+                super.updateItem(detalle, empty);
+                setText(empty || detalle == null ? null : detalle);
+                setWrapText(true);
+                setPadding(new Insets(12, 14, 12, 14));
+                setStyle("-fx-background-color: " +
+                        (isSelected() ? "#26395e" : "#121a2d") + "; " +
+                        "-fx-text-fill: #d6deef; " +
+                        "-fx-border-color: transparent transparent #202b42 transparent; " +
+                        "-fx-font-size: 12px;");
+            }
+        });
     }
 
     // =====================================================
@@ -297,6 +337,9 @@ public class MainViewController {
                         clientesController.obtenerClientes()));
 
         solicitudClienteCombo.setItems(
+                FXCollections.observableArrayList(
+                        clientesController.obtenerClientes()));
+        servicioClienteCombo.setItems(
                 FXCollections.observableArrayList(
                         clientesController.obtenerClientes()));
 
@@ -335,8 +378,63 @@ public class MainViewController {
     }
 
     @FXML
+    private void crearCliente() {
+        Dialog<Cliente> dialogo = new Dialog<>();
+        dialogo.setTitle("Nuevo cliente");
+        dialogo.setHeaderText("Registrar un cliente en TechSolutions");
+
+        ButtonType guardar = new ButtonType(
+                "Guardar cliente", ButtonBar.ButtonData.OK_DONE);
+        dialogo.getDialogPane().getButtonTypes().addAll(guardar, ButtonType.CANCEL);
+
+        TextField documento = new TextField();
+        documento.setPromptText("Número de documento");
+        TextField nombre = new TextField();
+        nombre.setPromptText("Nombre completo");
+        TextField correo = new TextField();
+        correo.setPromptText("Correo electrónico");
+
+        VBox formulario = new VBox(10,
+                new Label("Documento"), documento,
+                new Label("Nombre completo"), nombre,
+                new Label("Correo electrónico"), correo);
+        formulario.setPadding(new Insets(16));
+        dialogo.getDialogPane().setContent(formulario);
+
+        dialogo.setResultConverter(boton -> {
+            if (boton == guardar) {
+                return new Cliente(
+                        documento.getText().trim(),
+                        nombre.getText().trim(),
+                        correo.getText().trim());
+            }
+            return null;
+        });
+
+        dialogo.showAndWait().ifPresent(cliente -> {
+            if (vacio(cliente.getDocumento()) ||
+                    vacio(cliente.getNombre()) ||
+                    vacio(cliente.getCorreo())) {
+                mostrarAviso("Datos incompletos",
+                        "Completa el documento, nombre y correo electrónico.");
+                return;
+            }
+            try {
+                clientesController.registrarCliente(cliente);
+                cargarClientes();
+                actualizarDashboard();
+                mostrarConfirmacion("Cliente registrado",
+                        "El cliente " + cliente.getNombre() +
+                                " se registró correctamente.");
+            } catch (RuntimeException e) {
+                mostrarError("No se pudo registrar el cliente", e.getMessage());
+            }
+        });
+    }
+
+    @FXML
     private void irClientes() {
-        mainTabs.getSelectionModel().select(1);
+        seleccionarPestana("Clientes");
     }
 
     // =====================================================
@@ -351,13 +449,10 @@ public class MainViewController {
         serviciosTable.setItems(
                 FXCollections.observableArrayList(servicios));
 
-        paqueteServicioCombo.setItems(
-                FXCollections.observableArrayList(servicios));
-
         serviciosCountLabel.setText(
                 servicios.size() + " servicios");
 
-        actualizarElementosSolicitud();
+        actualizarListasDeElementos();
         actualizarDashboard();
     }
 
@@ -391,7 +486,29 @@ public class MainViewController {
 
     @FXML
     private void irServicios() {
-        mainTabs.getSelectionModel().select(2);
+        seleccionarPestana("Catálogo");
+    }
+
+    @FXML
+    private void crearServicioTecnologico() {
+        try {
+            ServicioTecnologico servicio = catalogoService.crearServicio(
+                    nuevoServicioCodigoField.getText(),
+                    nuevoServicioDescripcionArea.getText(),
+                    nuevoServicioTipoField.getText().trim());
+
+            cargarServicios();
+            nuevoServicioCodigoField.clear();
+            nuevoServicioDescripcionArea.clear();
+            nuevoServicioTipoField.clear();
+
+            mostrarConfirmacion("Servicio creado",
+                    "Se registró " + servicio.getNombre() +
+                            " con código " + servicio.getCodigo() +
+                            ".\nCosto base: " + moneda(servicio.getCostoBase()));
+        } catch (RuntimeException e) {
+            mostrarError("No se pudo crear el servicio", e.getMessage());
+        }
     }
 
     // =====================================================
@@ -437,6 +554,60 @@ public class MainViewController {
         }
     }
 
+    /**
+     * Configura una lista con casillas visibles. Así se pueden marcar varios
+     * servicios sin depender de Ctrl + clic.
+     */
+    private void configurarListaSeleccionMultiple(ListView<ElementoServicio> lista) {
+        lista.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        lista.setStyle(
+                "-fx-background-color: #0e1628; " +
+                "-fx-control-inner-background: #0e1628; " +
+                "-fx-border-color: #2b3854; -fx-border-radius: 10; " +
+                "-fx-background-radius: 10;");
+
+        lista.setCellFactory(lv -> new ListCell<>() {
+            private final CheckBox checkBox = new CheckBox();
+
+            {
+                checkBox.setStyle("-fx-text-fill: #d6deef; -fx-font-size: 11px;");
+                checkBox.setMaxWidth(Double.MAX_VALUE);
+                checkBox.setOnAction(event -> {
+                    int indice = getIndex();
+                    if (indice < 0 || indice >= getListView().getItems().size()) {
+                        return;
+                    }
+                    if (checkBox.isSelected()) {
+                        getListView().getSelectionModel().select(indice);
+                    } else {
+                        getListView().getSelectionModel().clearSelection(indice);
+                    }
+                    getListView().refresh();
+                });
+            }
+
+            @Override
+            protected void updateItem(ElementoServicio elemento, boolean empty) {
+                super.updateItem(elemento, empty);
+                if (empty || elemento == null) {
+                    setGraphic(null);
+                    setText(null);
+                } else {
+                    checkBox.setText(elemento.getNombre() + "  ·  " +
+                            moneda(elemento.calcularCosto()));
+                    checkBox.setSelected(getListView().getSelectionModel()
+                            .getSelectedIndices().contains(getIndex()));
+                    setGraphic(checkBox);
+                    setText(null);
+                }
+                setPadding(new Insets(7, 10, 7, 10));
+                setStyle("-fx-background-color: " +
+                        (isSelected() ? "#26395e" : "#0e1628") + "; " +
+                        "-fx-border-color: transparent transparent #202b42 transparent;");
+            }
+        });
+    }
+
     // =====================================================
     // PAQUETES
     // =====================================================
@@ -446,44 +617,39 @@ public class MainViewController {
         String codigo = paqueteCodigoField.getText();
         String nombre = paqueteNombreField.getText();
         String descripcion = paqueteDescripcionField.getText();
-        ServicioTecnologico servicio = paqueteServicioCombo.getValue();
+        List<ElementoServicio> seleccionados = new ArrayList<>(
+                paqueteElementosListView.getSelectionModel().getSelectedItems());
 
         if (vacio(codigo) || vacio(nombre) || vacio(descripcion)) {
-            mostrarAviso(
-                    "Datos incompletos",
-                    "Completa el código, nombre y descripción del paquete."
-            );
+            mostrarAviso("Datos incompletos",
+                    "Completa el código, nombre y descripción del paquete.");
             return;
         }
 
-        if (servicio == null) {
-            mostrarAviso(
-                    "Falta un servicio",
-                    "Selecciona el servicio que incluirá el paquete."
-            );
+        if (seleccionados.isEmpty()) {
+            mostrarAviso("Faltan elementos",
+                    "Selecciona al menos un servicio o paquete para incluir.");
             return;
         }
 
         try {
             PaqueteServicios paquete = new PaqueteServicios(
-                    codigo.trim(),
-                    nombre.trim(),
-                    descripcion.trim()
-            );
+                    codigo.trim(), nombre.trim(), descripcion.trim());
 
-            paquete.agregarElemento(servicio);
+            for (ElementoServicio elemento : seleccionados) {
+                paquete.agregarElemento(elemento);
+            }
+
             paquetesController.registrarPaquete(paquete);
-
             cargarPaquetes();
             actualizarElementosSolicitud();
             actualizarDashboard();
             limpiarPaquete();
 
-            mostrarConfirmacion(
-                    "Paquete creado",
-                    "El paquete se registró correctamente."
-            );
-
+            mostrarConfirmacion("Paquete creado",
+                    "El paquete se registró con " + seleccionados.size() +
+                            " elemento(s).\nCosto total: " +
+                            moneda(paquete.calcularCosto()));
         } catch (RuntimeException e) {
             mostrarError("No se pudo crear el paquete", e.getMessage());
         }
@@ -500,6 +666,7 @@ public class MainViewController {
         paquetesCountLabel.setText(
                 paquetes.size() + " paquetes");
 
+        actualizarListasDeElementos();
         actualizarDashboard();
     }
 
@@ -508,12 +675,101 @@ public class MainViewController {
         paqueteCodigoField.clear();
         paqueteNombreField.clear();
         paqueteDescripcionField.clear();
-        paqueteServicioCombo.getSelectionModel().clearSelection();
+        paqueteElementosListView.getSelectionModel().clearSelection();
+        paqueteElementosListView.refresh();
+    }
+
+    @FXML
+    private void verComposicionPaquete() {
+        PaqueteServicios paquete = paquetesTable.getSelectionModel().getSelectedItem();
+        if (paquete == null) {
+            mostrarAviso("Ningún paquete seleccionado",
+                    "Selecciona un paquete de la tabla para ver sus elementos.");
+            return;
+        }
+
+        StringBuilder contenido = new StringBuilder();
+        contenido.append(paquete.getNombre()).append("\n");
+        contenido.append(paquete.getDescripcion()).append("\n\n");
+        contenido.append("Elementos incluidos:\n");
+        agregarComposicion(contenido, paquete, 0);
+        contenido.append("\nCosto total: ").append(moneda(paquete.calcularCosto()));
+
+        Alert alerta = new Alert(Alert.AlertType.INFORMATION);
+        alerta.setTitle("Composición del paquete");
+        alerta.setHeaderText(paquete.getNombre());
+        alerta.setContentText(contenido.toString());
+        alerta.getDialogPane().setMinWidth(430);
+        alerta.showAndWait();
+    }
+
+    private void agregarComposicion(
+            StringBuilder contenido, ElementoServicio elemento, int nivel) {
+        String prefijo = "   ".repeat(nivel);
+        if (elemento instanceof PaqueteServicios paquete) {
+            contenido.append(prefijo).append("▣ ")
+                    .append(paquete.getNombre()).append(" — ")
+                    .append(moneda(paquete.calcularCosto())).append("\n");
+            for (ElementoServicio hijo : paquete.getElementos()) {
+                agregarComposicion(contenido, hijo, nivel + 1);
+            }
+        } else {
+            contenido.append(prefijo).append("• ")
+                    .append(elemento.getNombre()).append(" — ")
+                    .append(moneda(elemento.calcularCosto())).append("\n");
+        }
     }
 
     @FXML
     private void irPaquetes() {
-        mainTabs.getSelectionModel().select(4);
+        seleccionarPestana("Paquetes");
+    }
+
+    @FXML
+    private void crearServicioContratado() {
+        Cliente cliente = servicioClienteCombo.getValue();
+        List<ElementoServicio> elementos = new ArrayList<>(
+                servicioElementosListView.getSelectionModel().getSelectedItems());
+        String especialidad = servicioTecnicoCombo.getValue();
+
+        if (cliente == null) {
+            mostrarAviso("Falta el cliente", "Selecciona el cliente del servicio.");
+            return;
+        }
+        if (elementos.isEmpty()) {
+            mostrarAviso("Faltan elementos",
+                    "Selecciona al menos un servicio o paquete.");
+            return;
+        }
+        if (especialidad == null) {
+            mostrarAviso("Falta el técnico",
+                    "Selecciona la especialidad del técnico.");
+            return;
+        }
+
+        try {
+            TecnicoInfo tecnico = tecnicosController.consultarTecnico(especialidad);
+            Servicio servicio = new Servicio(cliente, elementos, tecnico);
+            serviciosContratados.add(servicio);
+
+            String detalle = cliente.getNombre() +
+                    " | Técnico: " + tecnico.getId() +
+                    " | Elementos: " + elementos.size() +
+                    " | Total: " + moneda(servicio.getCostoFinal());
+            serviciosContratadosListView.getItems().add(detalle);
+
+            mostrarConfirmacion("Servicio registrado",
+                    "Cliente: " + cliente.getNombre() +
+                            "\nTécnico: " + tecnico.getId() +
+                            "\nCosto final: " + moneda(servicio.getCostoFinal()));
+
+            servicioClienteCombo.getSelectionModel().clearSelection();
+            servicioElementosListView.getSelectionModel().clearSelection();
+            servicioElementosListView.refresh();
+            servicioTecnicoCombo.getSelectionModel().clearSelection();
+        } catch (RuntimeException e) {
+            mostrarError("No se pudo registrar el servicio", e.getMessage());
+        }
     }
 
     // =====================================================
@@ -521,13 +777,25 @@ public class MainViewController {
     // =====================================================
 
     private void actualizarElementosSolicitud() {
-        List<ElementoServicio> elementos = new ArrayList<>();
-
-        elementos.addAll(catalogoService.obtenerServicios());
-        elementos.addAll(paquetesController.obtenerPaquetes());
-
+        List<ElementoServicio> elementos = obtenerElementosDisponibles();
         solicitudElementoCombo.setItems(
                 FXCollections.observableArrayList(elementos));
+    }
+
+    private List<ElementoServicio> obtenerElementosDisponibles() {
+        List<ElementoServicio> elementos = new ArrayList<>();
+        elementos.addAll(catalogoService.obtenerServicios());
+        elementos.addAll(paquetesController.obtenerPaquetes());
+        return elementos;
+    }
+
+    private void actualizarListasDeElementos() {
+        List<ElementoServicio> elementos = obtenerElementosDisponibles();
+        paqueteElementosListView.setItems(
+                FXCollections.observableArrayList(elementos));
+        servicioElementosListView.setItems(
+                FXCollections.observableArrayList(elementos));
+        actualizarElementosSolicitud();
     }
 
     @FXML
@@ -640,7 +908,17 @@ public class MainViewController {
 
     @FXML
     private void irSolicitudes() {
-        mainTabs.getSelectionModel().select(5);
+        seleccionarPestana("Solicitudes");
+    }
+
+    private void seleccionarPestana(String nombre) {
+        for (Tab tab : mainTabs.getTabs()) {
+            if (tab.getText() != null &&
+                    tab.getText().trim().equalsIgnoreCase(nombre)) {
+                mainTabs.getSelectionModel().select(tab);
+                return;
+            }
+        }
     }
 
     // =====================================================

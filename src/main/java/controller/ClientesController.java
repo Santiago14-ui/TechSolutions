@@ -27,4 +27,7 @@ public class ClientesController {
     public Cliente buscarPorDocumento(String documento) {
         return clienteService.buscarPorDocumento(documento);
     }
+
+    public void registrarCliente(Cliente cliente) {clienteService.registrarCliente(cliente);}
+
 }
