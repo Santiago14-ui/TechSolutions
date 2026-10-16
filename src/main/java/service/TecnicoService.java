@@ -19,7 +19,7 @@ public class TecnicoService {
         this.adapter = adapter;
     }
 
-    public TecnicoInfo consultarTecnico(int codigoEspecialidad) {
+    public TecnicoInfo consultarTecnico(String codigoEspecialidad) {
         return adapter.consultarTecnico(codigoEspecialidad);
     }
 }
