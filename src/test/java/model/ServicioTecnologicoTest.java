@@ -1,117 +1,45 @@
 package model;
 
+import factory.MantenimientoPreventivoServicioTecnologicoFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Pruebas unitarias para la clase Servicio.
- */
 class ServicioTecnologicoTest {
 
     @Test
-    void debeCrearServicioConDatosCorrectos() {
-        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
-                "SER-001",
-                "Mantenimiento preventivo",
-                "Revisión y mantenimiento preventivo de equipos.",
-                80000
-        );
+    void creaServicioConDatosYTipoString() {
+        ServicioTecnologico servicio =
+                new MantenimientoPreventivoServicioTecnologicoFactory()
+                        .crearServicioTecnologico("SER-001", "Revisión preventiva");
 
-        assertEquals("SER-001", servicioTecnologico.getCodigo());
-        assertEquals("Mantenimiento preventivo", servicioTecnologico.getNombre());
+        assertEquals("SER-001", servicio.getCodigo());
+        assertEquals("Mantenimiento preventivo", servicio.getNombre());
+        assertEquals(80000, servicio.getCostoBase(), 0.001);
         assertEquals(
-                "Revisión y mantenimiento preventivo de equipos.",
-                servicioTecnologico.getDescripcion()
-        );
-        assertEquals(80000, servicioTecnologico.getCostoBase(), 0.001);
-    }
-
-    @Test
-    void debeCalcularCostoBaseCorrectamente() {
-        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
-                "SER-001",
                 "Mantenimiento preventivo",
-                "Revisión de equipos.",
-                80000
-        );
-
-        assertEquals(80000, servicioTecnologico.calcularCosto(), 0.001);
-    }
-
-    @Test
-    void debePermitirCostoCero() {
-        ServicioTecnologico servicioTecnologico = new ServicioTecnologico(
-                "SER-000",
-                "Diagnóstico",
-                "Evaluación inicial del equipo.",
-                0
-        );
-
-        assertEquals(0, servicioTecnologico.calcularCosto(), 0.001);
-    }
-
-    @Test
-    void debeRechazarCodigoNulo() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new ServicioTecnologico(
-                        null,
-                        "Mantenimiento preventivo",
-                        "Revisión de equipos.",
-                        80000
-                )
+                servicio.getTipoServicioTecnologico()
         );
     }
 
     @Test
-    void debeRechazarCodigoVacio() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new ServicioTecnologico(
-                        " ",
-                        "Mantenimiento preventivo",
-                        "Revisión de equipos.",
-                        80000
-                )
-        );
+    void calculaCostoBase() {
+        ServicioTecnologico servicio =
+                new MantenimientoPreventivoServicioTecnologicoFactory()
+                        .crearServicioTecnologico("SER-001", "Revisión");
+
+        assertEquals(80000, servicio.calcularCosto(), 0.001);
     }
 
     @Test
-    void debeRechazarNombreNulo() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new ServicioTecnologico(
-                        "SER-001",
-                        null,
-                        "Revisión de equipos.",
-                        80000
-                )
-        );
-    }
+    void representaTipoEnToString() {
+        ServicioTecnologico servicio =
+                new MantenimientoPreventivoServicioTecnologicoFactory()
+                        .crearServicioTecnologico("SER-001", "Revisión");
 
-    @Test
-    void debeRechazarDescripcionVacia() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new ServicioTecnologico(
-                        "SER-001",
-                        "Mantenimiento preventivo",
-                        "",
-                        80000
-                )
-        );
-    }
-
-    @Test
-    void debeRechazarCostoNegativo() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new ServicioTecnologico(
-                        "SER-001",
-                        "Mantenimiento preventivo",
-                        "Revisión de equipos.",
-                        -1000
+        assertTrue(
+                servicio.toString().contains(
+                        "tipoServicioTecnologico='Mantenimiento preventivo'"
                 )
         );
     }

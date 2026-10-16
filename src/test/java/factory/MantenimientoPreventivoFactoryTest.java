@@ -5,48 +5,39 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Pruebas unitarias para MantenimientoPreventivoFactory.
- */
 class MantenimientoPreventivoFactoryTest {
 
     @Test
-    void debeCrearServicioDeMantenimientoPreventivo() {
-        MantenimientoPreventivoFactory factory =
-                new MantenimientoPreventivoFactory();
+    void creaServicioConDatosCorrectos() {
+        ServicioTecnologico servicio =
+                new MantenimientoPreventivoServicioTecnologicoFactory()
+                        .crearServicioTecnologico(
+                                "SER-001",
+                                "Revisión preventiva de equipos"
+                        );
 
-        ServicioTecnologico servicioTecnologico = factory.crearServicio();
-
-        assertNotNull(servicioTecnologico);
-        assertEquals("SER-001", servicioTecnologico.getCodigo());
-        assertEquals("Mantenimiento preventivo", servicioTecnologico.getNombre());
+        assertNotNull(servicio);
+        assertEquals("SER-001", servicio.getCodigo());
+        assertEquals("Mantenimiento preventivo", servicio.getNombre());
         assertEquals(
-                "Revisión y mantenimiento preventivo de equipos.",
-                servicioTecnologico.getDescripcion()
+                "Revisión preventiva de equipos",
+                servicio.getDescripcion()
         );
-        assertEquals(80000, servicioTecnologico.calcularCosto(), 0.001);
+        assertEquals(80000, servicio.calcularCosto(), 0.001);
+        assertEquals(
+                "Mantenimiento preventivo",
+                servicio.getTipoServicioTecnologico()
+        );
     }
 
     @Test
-    void debeCrearUnServicioConCostoCorrecto() {
-        MantenimientoPreventivoFactory factory =
-                new MantenimientoPreventivoFactory();
+    void creaInstanciasIndependientes() {
+        MantenimientoPreventivoServicioTecnologicoFactory factory =
+                new MantenimientoPreventivoServicioTecnologicoFactory();
 
-        ServicioTecnologico servicioTecnologico = factory.crearServicio();
-
-        assertEquals(80000, servicioTecnologico.getCostoBase(), 0.001);
-    }
-
-    @Test
-    void debeCrearInstanciasIndependientes() {
-        MantenimientoPreventivoFactory factory =
-                new MantenimientoPreventivoFactory();
-
-        ServicioTecnologico servicioTecnologico1 = factory.crearServicio();
-        ServicioTecnologico servicioTecnologico2 = factory.crearServicio();
-
-        assertNotSame(servicioTecnologico1, servicioTecnologico2);
-        assertEquals(servicioTecnologico1.getCodigo(), servicioTecnologico2.getCodigo());
-        assertEquals(servicioTecnologico1.calcularCosto(), servicioTecnologico2.calcularCosto(), 0.001);
+        assertNotSame(
+                factory.crearServicioTecnologico("SER-001", "Revisión"),
+                factory.crearServicioTecnologico("SER-001", "Revisión")
+        );
     }
 }

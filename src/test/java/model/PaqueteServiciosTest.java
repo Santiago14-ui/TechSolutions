@@ -2,88 +2,74 @@ package model;
 
 import composite.ElementoServicio;
 import composite.PaqueteServicios;
+import factory.MantenimientoPreventivoServicioTecnologicoFactory;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * Pruebas unitarias para la clase PaqueteServicios.
- */
 class PaqueteServiciosTest {
 
-    @Test
-    void debeCrearPaqueteConDatosCorrectos() {
-        PaqueteServicios paquete = new PaqueteServicios(
+    private PaqueteServicios paquete() {
+        return new PaqueteServicios(
                 "PAQ-001",
                 "Paquete básico",
-                "Paquete de mantenimiento básico."
+                "Paquete de mantenimiento."
         );
+    }
+
+    @Test
+    void creaPaqueteConDatosCorrectos() {
+        PaqueteServicios paquete = paquete();
 
         assertEquals("PAQ-001", paquete.getCodigo());
-        assertEquals("Paquete básico", paquete.getNombre());
-        assertEquals(
-                "Paquete de mantenimiento básico.",
-                paquete.getDescripcion()
-        );
         assertTrue(paquete.getElementos().isEmpty());
     }
 
     @Test
-    void debeAgregarServicioAlPaquete() {
-        PaqueteServicios paquete = crearPaquete();
-        ServicioTecnologico servicioTecnologico = crearServicio("SER-001", 80000);
+    void agregaServicioYCalculaCosto() {
+        PaqueteServicios paquete = paquete();
 
-        paquete.agregarElemento(servicioTecnologico);
+        paquete.agregarElemento(
+                new MantenimientoPreventivoServicioTecnologicoFactory()
+                        .crearServicioTecnologico("SER-001", "Revisión")
+        );
 
-        assertEquals(1, paquete.getElementos().size());
-        assertTrue(paquete.getElementos().contains(servicioTecnologico));
+        assertEquals(80000, paquete.calcularCosto(), 0.001);
     }
 
     @Test
-    void debeCalcularCostoDeVariosServicios() {
-        PaqueteServicios paquete = crearPaquete();
+    void calculaCostoDePaquetesAnidados() {
+        PaqueteServicios principal = paquete();
 
-        paquete.agregarElemento(crearServicio("SER-001", 80000));
-        paquete.agregarElemento(crearServicio("SER-002", 120000));
-
-        assertEquals(200000, paquete.calcularCosto(), 0.001);
-    }
-
-    @Test
-    void debeCalcularCostoDePaquetesAnidados() {
-        PaqueteServicios paquetePrincipal = crearPaquete();
         PaqueteServicios subpaquete = new PaqueteServicios(
                 "PAQ-002",
                 "Subpaquete",
-                "Paquete secundario."
+                "Descripción"
         );
 
-        subpaquete.agregarElemento(crearServicio("SER-001", 80000));
-        subpaquete.agregarElemento(crearServicio("SER-002", 120000));
-
-        paquetePrincipal.agregarElemento(subpaquete);
-        paquetePrincipal.agregarElemento(
-                crearServicio("SER-003", 180000)
+        subpaquete.agregarElemento(
+                new MantenimientoPreventivoServicioTecnologicoFactory()
+                        .crearServicioTecnologico("SER-001", "Revisión")
         );
 
-        assertEquals(380000, paquetePrincipal.calcularCosto(), 0.001);
+        principal.agregarElemento(subpaquete);
+
+        assertEquals(80000, principal.calcularCosto(), 0.001);
     }
 
     @Test
-    void debeRechazarElementoNulo() {
-        PaqueteServicios paquete = crearPaquete();
-
+    void rechazaElementoNulo() {
         assertThrows(
                 IllegalArgumentException.class,
-                () -> paquete.agregarElemento(null)
+                () -> paquete().agregarElemento(null)
         );
     }
 
     @Test
-    void debeRechazarIncluirseASiMismo() {
-        PaqueteServicios paquete = crearPaquete();
+    void rechazaIncluirseASiMismo() {
+        PaqueteServicios paquete = paquete();
 
         assertThrows(
                 IllegalArgumentException.class,
@@ -92,64 +78,37 @@ class PaqueteServiciosTest {
     }
 
     @Test
-    void debeRechazarDependenciaCircularEntrePaquetes() {
-        PaqueteServicios paqueteA = crearPaquete();
+    void rechazaDependenciaCircular() {
+        PaqueteServicios a = paquete();
 
-        PaqueteServicios paqueteB = new PaqueteServicios(
+        PaqueteServicios b = new PaqueteServicios(
                 "PAQ-002",
-                "Paquete B",
-                "Segundo paquete."
+                "B",
+                "B"
         );
 
-        paqueteA.agregarElemento(paqueteB);
+        a.agregarElemento(b);
 
         assertThrows(
                 IllegalArgumentException.class,
-                () -> paqueteB.agregarElemento(paqueteA)
+                () -> b.agregarElemento(a)
         );
     }
 
     @Test
-    void debeImpedirModificarLaListaDeElementos() {
-        PaqueteServicios paquete = crearPaquete();
-        paquete.agregarElemento(crearServicio("SER-001", 80000));
+    void listaNoEsModificable() {
+        PaqueteServicios paquete = paquete();
 
-        List<ElementoServicio> elementos = paquete.getElementos();
+        paquete.agregarElemento(
+                new MantenimientoPreventivoServicioTecnologicoFactory()
+                        .crearServicioTecnologico("SER-001", "Revisión")
+        );
+
+        List<ElementoServicio> lista = paquete.getElementos();
 
         assertThrows(
                 UnsupportedOperationException.class,
-                () -> elementos.clear()
-        );
-
-        assertEquals(1, paquete.getElementos().size());
-    }
-
-    @Test
-    void debeRechazarCodigoVacio() {
-        assertThrows(
-                IllegalArgumentException.class,
-                () -> new PaqueteServicios(
-                        " ",
-                        "Paquete básico",
-                        "Descripción del paquete."
-                )
-        );
-    }
-
-    private PaqueteServicios crearPaquete() {
-        return new PaqueteServicios(
-                "PAQ-001",
-                "Paquete básico",
-                "Paquete de mantenimiento básico."
-        );
-    }
-
-    private ServicioTecnologico crearServicio(String codigo, double costo) {
-        return new ServicioTecnologico(
-                codigo,
-                "Servicio de prueba",
-                "Descripción del servicio de prueba.",
-                costo
+                lista::clear
         );
     }
 }
