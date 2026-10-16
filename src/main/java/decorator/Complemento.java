@@ -5,7 +5,7 @@ import composite.ElementoServicio;
 /**
  * Clase padre que recibe el objeto a modificar
  */
-public abstract class Complemento implements ComplementoServicioTecnologico, ElementoServicio {
+public abstract class Complemento implements ComplementoServicioTecnologico {
 
     protected final ComplementoServicioTecnologico servicio;
 
@@ -19,19 +19,27 @@ public abstract class Complemento implements ComplementoServicioTecnologico, Ele
     protected abstract double costoPropio();
 
     @Override
-    public String descripcion() {
-        return servicio.descripcion()
-                + " + "
-                + descripcionComplemento();
-    }
+    public String getNombre() {return servicio.getNombre() + " + " + descripcionComplemento();}
 
     @Override
-    public double costoAdicional() {
-        return servicio.costoAdicional() + costoPropio();
-    }
+    public String getDescripcion() {return servicio.getDescripcion() + " | " + descripcionComplemento();}
 
     @Override
-    public double calcularCosto() {
-        return servicio.calcularCosto() + costoPropio();
-    }
+    public String descripcion() {return servicio.descripcion() + " + " + descripcionComplemento();}
+
+    @Override
+    public double costoAdicional() {return servicio.costoAdicional() + costoPropio();}
+
+    @Override
+    public double calcularCosto() {return servicio.calcularCosto() + costoPropio();}
+
+    @Override
+    public void mostrarElemento(String identacion) {
+        servicio.mostrarElemento(identacion);
+        System.out.println(identacion
+                        + "  + "
+                        + descripcionComplemento()
+                        + " ($"
+                        + costoPropio()
+                        + ")");}
 }

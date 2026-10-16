@@ -1,9 +1,11 @@
 package decorator;
 
+import composite.ElementoServicio;
+
 /**
  * Interfaz que conecta el objeto con los complementos adicionales
  */
-public interface ComplementoServicioTecnologico {
+public interface ComplementoServicioTecnologico extends ElementoServicio {
 
     /**
      * Descripcion del complemento a aplicar
@@ -16,10 +18,4 @@ public interface ComplementoServicioTecnologico {
      * @return
      */
     double costoAdicional();
-
-    /**
-     * Precio final del complemento mas el objeto inicial
-     * @return
-     */
-    double calcularCosto();
 }

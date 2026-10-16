@@ -8,7 +8,7 @@ import decorator.ComplementoServicioTecnologico;
  * Representa un servicio técnico de TechSolutions.
  * Utiliza composite, decorator y factory method
  */
-public abstract class ServicioTecnologico implements ElementoServicio, ComplementoServicioTecnologico {
+public abstract class ServicioTecnologico implements ComplementoServicioTecnologico {
 
     /**
      * Atributos
