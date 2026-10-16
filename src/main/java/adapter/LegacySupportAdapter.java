@@ -32,9 +32,15 @@ public class LegacySupportAdapter {
      * @return información del técnico consultado
      */
     public TecnicoInfo consultarTecnico(String especialidad) {
+        int numero = switch (especialidad) {
+            case "Mantenimiento" -> 1;
+            case "Instalación de redes" -> 2;
+            case "Recuperación de información" -> 3;
+            default -> 4;
+        };
 
         String respuesta =
-                legacySupport.consultarTecnico(especialidad);
+                legacySupport.consultarTecnico(numero);
 
         if (respuesta == null || respuesta.isBlank()) {
             throw new IllegalStateException(

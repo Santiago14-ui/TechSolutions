@@ -156,15 +156,10 @@ public class Main extends Application {
 
             StringBuilder mensaje = new StringBuilder();
 
-            for (int codigoEspecialidad = 1;
-                 codigoEspecialidad <= 3;
-                 codigoEspecialidad++) {
 
-                TecnicoInfo tecnico =
-                        controlador.getTecnicoService()
-                                .consultarTecnico(codigoEspecialidad);
+            TecnicoInfo tecnico = controlador.getTecnicoService().consultarTecnico("Mantenimiento");
 
-                mensaje.append("Técnico: ")
+            mensaje.append("Técnico: ")
                         .append(tecnico.getId())
                         .append("\nEstado: ")
                         .append(
@@ -180,7 +175,6 @@ public class Main extends Application {
                                 )
                         )
                         .append("\n\n");
-            }
 
             alerta.setContentText(mensaje.toString());
             alerta.showAndWait();
