@@ -1,14 +1,696 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="viewController.MainViewController"
-            prefHeight="400.0" prefWidth="600.0">
+            styleClass="app-root">
 
-</AnchorPane>
+    <top>
+        <VBox spacing="0">
+            <HBox alignment="CENTER_LEFT" spacing="14" styleClass="topbar">
+                <padding>
+                    <Insets top="18" right="28" bottom="18" left="28"/>
+                </padding>
+
+                <StackPane styleClass="brand-mark">
+                    <Label text="TS" styleClass="brand-mark-text"/>
+                </StackPane>
+
+                <VBox spacing="3">
+                    <Label text="TECHSOLUTIONS" styleClass="brand-title"/>
+                    <Label text="CENTRO DE GESTIÓN TECNOLÓGICA"
+                           styleClass="brand-subtitle"/>
+                </VBox>
+
+                <Region HBox.hgrow="ALWAYS"/>
+
+                <Label text="●" styleClass="status-dot"/>
+                <Label text="Sistema operativo" styleClass="status-label"/>
+
+                <Separator orientation="VERTICAL" styleClass="top-separator"/>
+
+                <VBox alignment="CENTER_RIGHT" spacing="3">
+                    <Label text="PANEL ADMINISTRATIVO" styleClass="user-role"/>
+                    <Label text="Administrador" styleClass="user-name"/>
+                </VBox>
+            </HBox>
+
+            <HBox styleClass="accent-line"/>
+        </VBox>
+    </top>
+
+    <center>
+        <TabPane fx:id="mainTabs" tabClosingPolicy="UNAVAILABLE"
+                 styleClass="main-tabs">
+
+            <tabs>
+                <!-- INICIO -->
+                <Tab text="  Inicio  ">
+                    <ScrollPane fitToWidth="true" styleClass="content-scroll">
+                        <VBox spacing="24" styleClass="page-content">
+                            <VBox spacing="8">
+                                <Label text="Panel de control"
+                                       styleClass="eyebrow"/>
+                                <Label text="Todo bajo control."
+                                       styleClass="page-title"/>
+                                <Label text="Gestiona clientes, servicios técnicos y solicitudes desde un solo lugar."
+                                       styleClass="page-description"/>
+                            </VBox>
+
+                            <GridPane hgap="16" vgap="16">
+                                <columnConstraints>
+                                    <ColumnConstraints percentWidth="25"
+                                                       hgrow="ALWAYS"/>
+                                    <ColumnConstraints percentWidth="25"
+                                                       hgrow="ALWAYS"/>
+                                    <ColumnConstraints percentWidth="25"
+                                                       hgrow="ALWAYS"/>
+                                    <ColumnConstraints percentWidth="25"
+                                                       hgrow="ALWAYS"/>
+                                </columnConstraints>
+
+                                <VBox styleClass="stat-card" spacing="12"
+                                      GridPane.columnIndex="0">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="CLIENTES"
+                                               styleClass="stat-caption"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="◉" styleClass="stat-icon blue"/>
+                                    </HBox>
+                                    <Label fx:id="totalClientesLabel" text="0"
+                                           styleClass="stat-number"/>
+                                    <Label text="Clientes registrados"
+                                           styleClass="stat-footnote"/>
+                                </VBox>
+
+                                <VBox styleClass="stat-card" spacing="12"
+                                      GridPane.columnIndex="1">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="SERVICIOS"
+                                               styleClass="stat-caption"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="⌘" styleClass="stat-icon purple"/>
+                                    </HBox>
+                                    <Label fx:id="totalServiciosLabel" text="0"
+                                           styleClass="stat-number"/>
+                                    <Label text="Opciones en el catálogo"
+                                           styleClass="stat-footnote"/>
+                                </VBox>
+
+                                <VBox styleClass="stat-card" spacing="12"
+                                      GridPane.columnIndex="2">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="PAQUETES"
+                                               styleClass="stat-caption"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="▦" styleClass="stat-icon cyan"/>
+                                    </HBox>
+                                    <Label fx:id="totalPaquetesLabel" text="0"
+                                           styleClass="stat-number"/>
+                                    <Label text="Paquetes configurados"
+                                           styleClass="stat-footnote"/>
+                                </VBox>
+
+                                <VBox styleClass="stat-card" spacing="12"
+                                      GridPane.columnIndex="3">
+                                    <HBox alignment="CENTER_LEFT">
+                                        <Label text="SOLICITUDES"
+                                               styleClass="stat-caption"/>
+                                        <Region HBox.hgrow="ALWAYS"/>
+                                        <Label text="↗" styleClass="stat-icon orange"/>
+                                    </HBox>
+                                    <Label fx:id="totalSolicitudesLabel" text="0"
+                                           styleClass="stat-number"/>
+                                    <Label text="Solicitudes registradas"
+                                           styleClass="stat-footnote"/>
+                                </VBox>
+                            </GridPane>
+
+                            <HBox spacing="18" alignment="TOP_LEFT">
+                                <VBox spacing="18" styleClass="panel"
+                                      HBox.hgrow="ALWAYS">
+                                    <VBox spacing="6">
+                                        <Label text="Accesos rápidos"
+                                               styleClass="section-title"/>
+                                        <Label text="Ve directamente a la tarea que necesitas."
+                                               styleClass="muted-text"/>
+                                    </VBox>
+
+                                    <GridPane hgap="12" vgap="12">
+                                        <columnConstraints>
+                                            <ColumnConstraints percentWidth="50"
+                                                               hgrow="ALWAYS"/>
+                                            <ColumnConstraints percentWidth="50"
+                                                               hgrow="ALWAYS"/>
+                                        </columnConstraints>
+
+                                        <VBox styleClass="quick-card"
+                                              spacing="8"
+                                              GridPane.columnIndex="0"
+                                              GridPane.rowIndex="0">
+                                            <Label text="◉"
+                                                   styleClass="quick-icon blue"/>
+                                            <Label text="Consultar clientes"
+                                                   styleClass="quick-title"/>
+                                            <Label text="Busca clientes y revisa sus datos."
+                                                   styleClass="muted-text"
+                                                   wrapText="true"/>
+                                            <Button text="Ver clientes  →"
+                                                    onAction="#irClientes"
+                                                    styleClass="button-secondary"
+                                                    maxWidth="Infinity"/>
+                                        </VBox>
+
+                                        <VBox styleClass="quick-card"
+                                              spacing="8"
+                                              GridPane.columnIndex="1"
+                                              GridPane.rowIndex="0">
+                                            <Label text="⌘"
+                                                   styleClass="quick-icon purple"/>
+                                            <Label text="Explorar servicios"
+                                                   styleClass="quick-title"/>
+                                            <Label text="Consulta las soluciones disponibles."
+                                                   styleClass="muted-text"
+                                                   wrapText="true"/>
+                                            <Button text="Abrir catálogo  →"
+                                                    onAction="#irServicios"
+                                                    styleClass="button-secondary"
+                                                    maxWidth="Infinity"/>
+                                        </VBox>
+
+                                        <VBox styleClass="quick-card"
+                                              spacing="8"
+                                              GridPane.columnIndex="0"
+                                              GridPane.rowIndex="1">
+                                            <Label text="▦"
+                                                   styleClass="quick-icon cyan"/>
+                                            <Label text="Crear un paquete"
+                                                   styleClass="quick-title"/>
+                                            <Label text="Agrupa servicios en una solución."
+                                                   styleClass="muted-text"
+                                                   wrapText="true"/>
+                                            <Button text="Crear paquete  →"
+                                                    onAction="#irPaquetes"
+                                                    styleClass="button-secondary"
+                                                    maxWidth="Infinity"/>
+                                        </VBox>
+
+                                        <VBox styleClass="quick-card"
+                                              spacing="8"
+                                              GridPane.columnIndex="1"
+                                              GridPane.rowIndex="1">
+                                            <Label text="↗"
+                                                   styleClass="quick-icon orange"/>
+                                            <Label text="Nueva solicitud"
+                                                   styleClass="quick-title"/>
+                                            <Label text="Registra una solicitud para un cliente."
+                                                   styleClass="muted-text"
+                                                   wrapText="true"/>
+                                            <Button text="Crear solicitud  →"
+                                                    onAction="#irSolicitudes"
+                                                    styleClass="button-primary"
+                                                    maxWidth="Infinity"/>
+                                        </VBox>
+                                    </GridPane>
+                                </VBox>
+
+                                <VBox spacing="16" styleClass="panel"
+                                      minWidth="245" prefWidth="285">
+                                    <Label text="Estado del sistema"
+                                           styleClass="section-title"/>
+
+                                    <HBox spacing="10" alignment="CENTER_LEFT">
+                                        <StackPane styleClass="mini-status-icon">
+                                            <Label text="✓"/>
+                                        </StackPane>
+                                        <VBox spacing="3">
+                                            <Label text="Catálogo"
+                                                   styleClass="quick-title"/>
+                                            <Label text="Disponible"
+                                                   styleClass="success-text"/>
+                                        </VBox>
+                                    </HBox>
+
+                                    <Separator styleClass="panel-separator"/>
+
+                                    <HBox spacing="10" alignment="CENTER_LEFT">
+                                        <StackPane styleClass="mini-status-icon">
+                                            <Label text="✓"/>
+                                        </StackPane>
+                                        <VBox spacing="3">
+                                            <Label text="Gestión de clientes"
+                                                   styleClass="quick-title"/>
+                                            <Label text="Disponible"
+                                                   styleClass="success-text"/>
+                                        </VBox>
+                                    </HBox>
+
+                                    <Separator styleClass="panel-separator"/>
+
+                                    <HBox spacing="10" alignment="CENTER_LEFT">
+                                        <StackPane styleClass="mini-status-icon">
+                                            <Label text="↔"/>
+                                        </StackPane>
+                                        <VBox spacing="3">
+                                            <Label text="Consulta de técnicos"
+                                                   styleClass="quick-title"/>
+                                            <Label text="Conectado a LegacySupport"
+                                                   styleClass="muted-text"
+                                                   wrapText="true"/>
+                                        </VBox>
+                                    </HBox>
+
+                                    <Region VBox.vgrow="ALWAYS"/>
+
+                                    <Label text="TECHSOLUTIONS  /  01"
+                                           styleClass="panel-footer"/>
+                                </VBox>
+                            </HBox>
+
+                            <Label text="TECHSOLUTIONS  •  GESTIÓN INTELIGENTE DE SERVICIOS"
+                                   styleClass="footer-text"/>
+                        </VBox>
+                    </ScrollPane>
+                </Tab>
+
+                <!-- CLIENTES -->
+                <Tab text="  Clientes  ">
+                    <VBox spacing="18" styleClass="page-content">
+                        <VBox spacing="6">
+                            <Label text="DIRECTORIO"
+                                   styleClass="eyebrow"/>
+                            <Label text="Gestión de clientes"
+                                   styleClass="page-title"/>
+                            <Label text="Consulta el directorio de clientes registrados."
+                                   styleClass="page-description"/>
+                        </VBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="buscarClienteField"
+                                       promptText="Buscar por documento..."
+                                       onAction="#buscarCliente"
+                                       styleClass="search-field"
+                                       HBox.hgrow="ALWAYS"/>
+                            <Button text="Buscar"
+                                    onAction="#buscarCliente"
+                                    styleClass="button-primary"/>
+                            <Button text="Mostrar todos"
+                                    onAction="#cargarClientes"
+                                    styleClass="button-secondary"/>
+                        </HBox>
+
+                        <VBox styleClass="table-panel" spacing="12"
+                              VBox.vgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Clientes registrados"
+                                       styleClass="section-title"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="clientesCountLabel" text="0 registros"
+                                       styleClass="count-chip"/>
+                            </HBox>
+
+                            <TableView fx:id="clientesTable"
+                                       styleClass="data-table"
+                                       VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="clienteDocumentoCol"
+                                                 text="DOCUMENTO"
+                                                 prefWidth="180"/>
+                                    <TableColumn fx:id="clienteNombreCol"
+                                                 text="NOMBRE COMPLETO"
+                                                 prefWidth="260"/>
+                                    <TableColumn fx:id="clienteCorreoCol"
+                                                 text="CORREO ELECTRÓNICO"
+                                                 prefWidth="300"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </VBox>
+                </Tab>
+
+                <!-- CATÁLOGO -->
+                <Tab text="  Catálogo  ">
+                    <VBox spacing="18" styleClass="page-content">
+                        <VBox spacing="6">
+                            <Label text="SOLUCIONES TECNOLÓGICAS"
+                                   styleClass="eyebrow"/>
+                            <Label text="Catálogo de servicios"
+                                   styleClass="page-title"/>
+                            <Label text="Consulta los tipos de servicio ofrecidos por TechSolutions."
+                                   styleClass="page-description"/>
+                        </VBox>
+
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="buscarServicioField"
+                                       promptText="Buscar por código..."
+                                       onAction="#buscarServicio"
+                                       styleClass="search-field"
+                                       HBox.hgrow="ALWAYS"/>
+                            <Button text="Buscar"
+                                    onAction="#buscarServicio"
+                                    styleClass="button-primary"/>
+                            <Button text="Ver catálogo completo"
+                                    onAction="#cargarServicios"
+                                    styleClass="button-secondary"/>
+                        </HBox>
+
+                        <VBox styleClass="table-panel" spacing="12"
+                              VBox.vgrow="ALWAYS">
+                            <HBox alignment="CENTER_LEFT">
+                                <Label text="Servicios disponibles"
+                                       styleClass="section-title"/>
+                                <Region HBox.hgrow="ALWAYS"/>
+                                <Label fx:id="serviciosCountLabel" text="0 servicios"
+                                       styleClass="count-chip"/>
+                            </HBox>
+
+                            <TableView fx:id="serviciosTable"
+                                       styleClass="data-table"
+                                       VBox.vgrow="ALWAYS">
+                                <columns>
+                                    <TableColumn fx:id="servicioCodigoCol"
+                                                 text="CÓDIGO"
+                                                 prefWidth="120"/>
+                                    <TableColumn fx:id="servicioNombreCol"
+                                                 text="SERVICIO"
+                                                 prefWidth="240"/>
+                                    <TableColumn fx:id="servicioDescripcionCol"
+                                                 text="DESCRIPCIÓN"
+                                                 prefWidth="350"/>
+                                    <TableColumn fx:id="servicioCostoCol"
+                                                 text="COSTO BASE"
+                                                 prefWidth="160"/>
+                                </columns>
+                            </TableView>
+                        </VBox>
+                    </VBox>
+                </Tab>
+
+                <!-- TÉCNICOS -->
+                <Tab text="  Técnicos  ">
+                    <VBox spacing="20" styleClass="page-content">
+                        <VBox spacing="6">
+                            <Label text="PERSONAL TÉCNICO"
+                                   styleClass="eyebrow"/>
+                            <Label text="Consulta de técnicos"
+                                   styleClass="page-title"/>
+                            <Label text="Consulta disponibilidad y costo de desplazamiento por especialidad."
+                                   styleClass="page-description"/>
+                        </VBox>
+
+                        <HBox spacing="18" alignment="TOP_LEFT">
+                            <VBox spacing="16" styleClass="panel"
+                                  prefWidth="390">
+                                <Label text="Nueva consulta"
+                                       styleClass="section-title"/>
+                                <Label text="Selecciona una especialidad para consultar el sistema externo."
+                                       styleClass="muted-text"
+                                       wrapText="true"/>
+
+                                <Label text="ESPECIALIDAD"
+                                       styleClass="field-label"/>
+                                <ComboBox fx:id="especialidadCombo"
+                                          promptText="Selecciona una especialidad"
+                                          maxWidth="Infinity"
+                                          styleClass="dark-combo"/>
+
+                                <Button text="Consultar técnico  →"
+                                        onAction="#consultarTecnico"
+                                        styleClass="button-primary"
+                                        maxWidth="Infinity"/>
+
+                                <Label text="La disponibilidad y el costo se obtienen mediante el adaptador LegacySupport."
+                                       styleClass="hint-text"
+                                       wrapText="true"/>
+                            </VBox>
+
+                            <VBox spacing="16" styleClass="panel"
+                                  HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Resultado de consulta"
+                                           styleClass="section-title"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label text="LIVE"
+                                           styleClass="live-chip"/>
+                                </HBox>
+
+                                <VBox spacing="6" styleClass="technician-result">
+                                    <Label text="IDENTIFICADOR"
+                                           styleClass="field-label"/>
+                                    <Label fx:id="tecnicoIdLabel"
+                                           text="Sin consultar"
+                                           styleClass="result-title"/>
+
+                                    <Separator styleClass="panel-separator"/>
+
+                                    <GridPane hgap="20" vgap="14">
+                                        <columnConstraints>
+                                            <ColumnConstraints percentWidth="50"/>
+                                            <ColumnConstraints percentWidth="50"/>
+                                        </columnConstraints>
+
+                                        <VBox spacing="6"
+                                              GridPane.columnIndex="0">
+                                            <Label text="DISPONIBILIDAD"
+                                                   styleClass="field-label"/>
+                                            <Label fx:id="tecnicoEstadoLabel"
+                                                   text="—"
+                                                   styleClass="result-value"/>
+                                        </VBox>
+
+                                        <VBox spacing="6"
+                                              GridPane.columnIndex="1">
+                                            <Label text="DESPLAZAMIENTO"
+                                                   styleClass="field-label"/>
+                                            <Label fx:id="tecnicoCostoLabel"
+                                                   text="—"
+                                                   styleClass="result-value"/>
+                                        </VBox>
+                                    </GridPane>
+                                </VBox>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </Tab>
+
+                <!-- PAQUETES -->
+                <Tab text="  Paquetes  ">
+                    <VBox spacing="18" styleClass="page-content">
+                        <VBox spacing="6">
+                            <Label text="SERVICIOS PERSONALIZADOS"
+                                   styleClass="eyebrow"/>
+                            <Label text="Constructor de paquetes"
+                                   styleClass="page-title"/>
+                            <Label text="Agrupa un servicio tecnológico dentro de un paquete reutilizable."
+                                   styleClass="page-description"/>
+                        </VBox>
+
+                        <HBox spacing="18" alignment="TOP_LEFT">
+                            <VBox spacing="14" styleClass="panel"
+                                  prefWidth="340">
+                                <Label text="Nuevo paquete"
+                                       styleClass="section-title"/>
+
+                                <Label text="CÓDIGO"
+                                       styleClass="field-label"/>
+                                <TextField fx:id="paqueteCodigoField"
+                                           promptText="Ej. PAQ-001"
+                                           styleClass="dark-field"/>
+
+                                <Label text="NOMBRE"
+                                       styleClass="field-label"/>
+                                <TextField fx:id="paqueteNombreField"
+                                           promptText="Nombre del paquete"
+                                           styleClass="dark-field"/>
+
+                                <Label text="DESCRIPCIÓN"
+                                       styleClass="field-label"/>
+                                <TextArea fx:id="paqueteDescripcionField"
+                                          promptText="Describe la solución..."
+                                          prefRowCount="3"
+                                          wrapText="true"
+                                          styleClass="dark-area"/>
+
+                                <Label text="SERVICIO INICIAL"
+                                       styleClass="field-label"/>
+                                <ComboBox fx:id="paqueteServicioCombo"
+                                          promptText="Selecciona un servicio"
+                                          maxWidth="Infinity"
+                                          styleClass="dark-combo"/>
+
+                                <Button text="＋  Crear paquete"
+                                        onAction="#crearPaquete"
+                                        styleClass="button-primary"
+                                        maxWidth="Infinity"/>
+
+                                <Button text="Limpiar campos"
+                                        onAction="#limpiarPaquete"
+                                        styleClass="button-secondary"
+                                        maxWidth="Infinity"/>
+                            </VBox>
+
+                            <VBox spacing="12" styleClass="table-panel"
+                                  HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Paquetes registrados"
+                                           styleClass="section-title"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="paquetesCountLabel"
+                                           text="0 paquetes"
+                                           styleClass="count-chip"/>
+                                </HBox>
+
+                                <TableView fx:id="paquetesTable"
+                                           styleClass="data-table"
+                                           VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="paqueteTablaCodigoCol"
+                                                     text="CÓDIGO"
+                                                     prefWidth="110"/>
+                                        <TableColumn fx:id="paqueteTablaNombreCol"
+                                                     text="NOMBRE"
+                                                     prefWidth="180"/>
+                                        <TableColumn fx:id="paqueteTablaDescripcionCol"
+                                                     text="DESCRIPCIÓN"
+                                                     prefWidth="260"/>
+                                        <TableColumn fx:id="paqueteTablaCostoCol"
+                                                     text="COSTO"
+                                                     prefWidth="130"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </Tab>
+
+                <!-- SOLICITUDES -->
+                <Tab text="  Solicitudes  ">
+                    <VBox spacing="18" styleClass="page-content">
+                        <VBox spacing="6">
+                            <Label text="ATENCIÓN AL CLIENTE"
+                                   styleClass="eyebrow"/>
+                            <Label text="Gestión de solicitudes"
+                                   styleClass="page-title"/>
+                            <Label text="Registra una solicitud y consulta su información y costo calculado."
+                                   styleClass="page-description"/>
+                        </VBox>
+
+                        <HBox spacing="18" alignment="TOP_LEFT">
+                            <VBox spacing="12" styleClass="panel"
+                                  prefWidth="350">
+                                <Label text="Registrar solicitud"
+                                       styleClass="section-title"/>
+
+                                <Label text="CÓDIGO ÚNICO"
+                                       styleClass="field-label"/>
+                                <TextField fx:id="solicitudCodigoField"
+                                           promptText="Ej. SOL-001"
+                                           styleClass="dark-field"/>
+
+                                <Label text="CLIENTE"
+                                       styleClass="field-label"/>
+                                <ComboBox fx:id="solicitudClienteCombo"
+                                          promptText="Selecciona un cliente"
+                                          maxWidth="Infinity"
+                                          styleClass="dark-combo"/>
+
+                                <Label text="SERVICIO O PAQUETE"
+                                       styleClass="field-label"/>
+                                <ComboBox fx:id="solicitudElementoCombo"
+                                          promptText="Selecciona un elemento"
+                                          maxWidth="Infinity"
+                                          styleClass="dark-combo"/>
+
+                                <Label text="PRIORIDAD"
+                                       styleClass="field-label"/>
+                                <ComboBox fx:id="solicitudPrioridadCombo"
+                                          promptText="Selecciona la prioridad"
+                                          maxWidth="Infinity"
+                                          styleClass="dark-combo"/>
+
+                                <Label text="FECHA PROGRAMADA"
+                                       styleClass="field-label"/>
+                                <DatePicker fx:id="solicitudFechaPicker"
+                                            promptText="Fecha de atención"
+                                            maxWidth="Infinity"
+                                            styleClass="dark-date"/>
+
+                                <Label text="OBSERVACIONES"
+                                       styleClass="field-label"/>
+                                <TextArea fx:id="solicitudObservacionesArea"
+                                          promptText="Detalles adicionales..."
+                                          prefRowCount="2"
+                                          wrapText="true"
+                                          styleClass="dark-area"/>
+
+                                <Button text="＋  Registrar solicitud"
+                                        onAction="#crearSolicitud"
+                                        styleClass="button-primary"
+                                        maxWidth="Infinity"/>
+
+                                <Button text="Limpiar campos"
+                                        onAction="#limpiarSolicitud"
+                                        styleClass="button-secondary"
+                                        maxWidth="Infinity"/>
+                            </VBox>
+
+                            <VBox spacing="12" styleClass="table-panel"
+                                  HBox.hgrow="ALWAYS">
+                                <HBox alignment="CENTER_LEFT">
+                                    <Label text="Solicitudes registradas"
+                                           styleClass="section-title"/>
+                                    <Region HBox.hgrow="ALWAYS"/>
+                                    <Label fx:id="solicitudesCountLabel"
+                                           text="0 solicitudes"
+                                           styleClass="count-chip"/>
+                                </HBox>
+
+                                <TableView fx:id="solicitudesTable"
+                                           styleClass="data-table"
+                                           VBox.vgrow="ALWAYS">
+                                    <columns>
+                                        <TableColumn fx:id="solicitudTablaCodigoCol"
+                                                     text="CÓDIGO"
+                                                     prefWidth="105"/>
+                                        <TableColumn fx:id="solicitudTablaClienteCol"
+                                                     text="CLIENTE"
+                                                     prefWidth="165"/>
+                                        <TableColumn fx:id="solicitudTablaFechaCol"
+                                                     text="CREACIÓN"
+                                                     prefWidth="115"/>
+                                        <TableColumn fx:id="solicitudTablaPrioridadCol"
+                                                     text="PRIORIDAD"
+                                                     prefWidth="105"/>
+                                        <TableColumn fx:id="solicitudTablaCostoCol"
+                                                     text="COSTO TOTAL"
+                                                     prefWidth="135"/>
+                                    </columns>
+                                </TableView>
+                            </VBox>
+                        </HBox>
+                    </VBox>
+                </Tab>
+            </tabs>
+        </TabPane>
+    </center>
+
+    <bottom>
+        <HBox alignment="CENTER_LEFT" spacing="8" styleClass="bottom-bar">
+            <padding>
+                <Insets top="10" right="24" bottom="10" left="24"/>
+            </padding>
+            <Label text="●" styleClass="status-dot"/>
+            <Label text="TECHSOLUTIONS"
+                   styleClass="bottom-brand"/>
+            <Label text="· Sistema de gestión de servicios tecnológicos"
+                   styleClass="bottom-muted"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label text="PANEL DE ADMINISTRACIÓN"
+                   styleClass="bottom-muted"/>
+        </HBox>
+    </bottom>
+</BorderPane>
